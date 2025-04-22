@@ -22,7 +22,14 @@ trong
 hình ảnh cái nào dính đến cơ sở dữ liệu (mongodb) thì lưu trong backend, cái nào dính đến template (slider banner,...) thì lưu trong frontend
 
 git :
+tritxps28458@fpt.edu.vn
+@Xuantri1998
 git init
+git add .
+git commit -m "Your commit message"
+git push origin main
+
+
 
 hỏi cô trang chủ thì làm <Header></Header>,<Main></Main>,<Footer></Footer> rồi trong <Main></Main> sẽ là các component hay bỏ luôn <Main></Main>, chỉ cầm các component để ở giữa thôi
 
