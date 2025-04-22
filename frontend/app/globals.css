@@ -1,0 +1,20 @@
+@import "tailwindcss";
+
+:root {
+  --color-background: #ffffff;
+  --color-foreground: #171717;
+  --font-sans: "Roboto", sans-serif;
+}
+
+* {
+  /* margin: 0; */
+  padding: 0;
+  box-sizing: border-box;
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--color-background);
+  color: var(--color-foreground);
+  font-family: var(--font-sans), Arial, sans-serif;
+}

@@ -1,0 +1,35 @@
+// thiết lập cấu trúc layout cho ứng dụng Next.js
+import React from "react";
+import { Providers } from "@/app/providers";
+import { Roboto, Open_Sans } from "next/font/google";
+import "./globals.css";
+
+const roboto = Roboto({
+  variable: "--font-roboto",
+  subsets: ["latin", "vietnamese"],
+});
+
+const openSans = Open_Sans({
+  variable: "--font-open-sans",
+  subsets: ["latin", "vietnamese"],
+});
+
+export const metadata = {
+  title: "Thời Trang Nam Cao Cấp",
+  description:
+    "Khám phá bộ sưu tập thời trang nam cao cấp với các sản phẩm chất lượng và phong cách hiện đại.",
+};
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <html lang="en">
+      <body className={`${roboto.variable} ${openSans.variable} antialiased `}>
+        <Providers>{children}</Providers>
+      </body>
+    </html>
+  );
+}

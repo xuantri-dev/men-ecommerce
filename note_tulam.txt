@@ -1,0 +1,34 @@
+frontend
+nextjs, typescript, heroicons
+npm run dev
+trang chủ bán hàng
+http://localhost:3000/
+trang chủ admin
+http://localhost:3000/admin
+
+
+
+backend 
+nodejs, expressjs, path, morgan, cookieParser, createError, bcryptjs, cors, jsonwebtoken, mongoose, multer, slugify
+npm run dev
+http://localhost:5000/api/products
+các chức năng làm thêm
+sản phẩm mới, sản phẩm bán chạy
+
+
+tất cả ảnh (product, category,...) đều lưu chung 1 file img, sau chỉ cần lấy đường dẫn up lên, không cần phải chia riêng img/catgeory, img/product,...
+làm theo kiểu backend, frontend là chuẩn vì sau này khi up lên host sẽ up 2 cổng khác nhau cho 2 folder
+trong 
+hình ảnh cái nào dính đến cơ sở dữ liệu (mongodb) thì lưu trong backend, cái nào dính đến template (slider banner,...) thì lưu trong frontend
+
+git :
+git init
+
+hỏi cô trang chủ thì làm <Header></Header>,<Main></Main>,<Footer></Footer> rồi trong <Main></Main> sẽ là các component hay bỏ luôn <Main></Main>, chỉ cầm các component để ở giữa thôi
+
+đang làm
+làm thêm sản phẩm theo danh mục (giống https://canifa.com/)
+swiper categories giống template
+
+
+
