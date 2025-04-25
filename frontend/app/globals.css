@@ -18,3 +18,17 @@ body {
   color: var(--color-foreground);
   font-family: var(--font-sans), Arial, sans-serif;
 }
+
+@keyframes marquee {
+  0% {
+    transform: translate(0, 0);
+  }
+  100% {
+    transform: translate(-100%, 0);
+  }
+}
+
+.animate-marquee {
+  padding-left: 100%;
+  animation: marquee 30s linear infinite;
+}
