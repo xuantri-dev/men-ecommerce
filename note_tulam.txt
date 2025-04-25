@@ -24,6 +24,7 @@ hình ảnh cái nào dính đến cơ sở dữ liệu (mongodb) thì lưu tron
 git :
 tritxps28458@fpt.edu.vn
 @Xuantri1998
+https://github.com/TuiTenXT/tulam
 git init
 khởi tạo một repository Git mới trong thư mục hiện tại. Nó tạo ra một thư mục .git ẩn, nơi Git sẽ lưu trữ tất cả các thông tin về phiên bản của dự án
 git add .
