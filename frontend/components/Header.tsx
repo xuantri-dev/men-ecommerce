@@ -137,10 +137,10 @@ const Header: React.FC = () => {
                 <input
                   type="text"
                   placeholder="Sản phẩm cần tìm..."
-                  className="pl-2.5 bg-transparent text-sm outline-none px-2 py-1 text-gray-800 placeholder-gray-400 w-38 ml-3"
+                  className="bg-transparent text-sm outline-none text-gray-800 placeholder-gray-400 w-38"
                 />
-                <button className="p-1 rounded-full transition cursor-pointer">
-                  <MagnifyingGlassIcon className="w-5 h-5 text-gray-500" />
+                <button className="rounded-full transition cursor-pointer ">
+                  <MagnifyingGlassIcon className="w-5 h-5 text-gray-500 hover:text-blue-700" />
                 </button>
               </div>
 

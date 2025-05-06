@@ -35,11 +35,11 @@ git push origin main
 đẩy các commit từ nhánh main của repository cục bộ lên remote repository origin trên GitHub
 
 
-
-hỏi cô trang chủ thì làm <Header></Header>,<Main></Main>,<Footer></Footer> rồi trong <Main></Main> sẽ là các component hay bỏ luôn <Main></Main>, chỉ cầm các component để ở giữa thôi
+*những thứ cần hỏi
+trang chủ và các trang con thì làm <Header></Header>,<Main></Main>,<Footer></Footer> rồi trong <Main></Main> sẽ là các component hay bỏ luôn <Main></Main>, chỉ cầm các component để ở giữa thôi
+trang admin có cần phải đăng nhập trước rồi mới vô hay là vô theo đường dẫn
 
 đang làm
-làm thêm sản phẩm theo danh mục (giống https://canifa.com/)
 swiper categories giống template
 
 

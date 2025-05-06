@@ -48,8 +48,8 @@ export default function Slider() {
   };
 
   return (
-    <div className="slider section--lg py-16 bg-blue-500">
-      <div className="slider__container relative mx-auto h-[500px] max-w-[1300px] overflow-hidden px-3 bg-red-500">
+    <div className="slider bg-blue-500">
+      <div className="slider__container relative mx-auto h-[500px] max-w-[1300px] overflow-hidden bg-red-500">
         {/* Slider content container */}
         <div
           className="slider__content flex transition-transform duration-1000 h-full"
