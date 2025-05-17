@@ -3,6 +3,8 @@ import React from "react";
 import { Providers } from "@/app/providers";
 import { Roboto, Open_Sans } from "next/font/google";
 import "./globals.css";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const roboto = Roboto({
   variable: "--font-roboto",
@@ -26,9 +28,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="vi">
       <body className={`${roboto.variable} ${openSans.variable} antialiased `}>
-        <Providers>{children}</Providers>
+        <Providers>
+          {children}
+          <ToastContainer position="top-center" autoClose={3000} />
+        </Providers>
       </body>
     </html>
   );

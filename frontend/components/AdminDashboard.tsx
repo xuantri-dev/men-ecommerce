@@ -5,10 +5,9 @@ import AdminHeader from "./AdminHeader";
 
 const AdminDashboard: React.FC = () => {
   return (
-    <div className="flex h-screen">
+    <div className="flex min-h-screen">
       <AdminSidebar />
-
-      <div className="flex-1 ml-[calc(100%/8)]">
+      <div className="flex-1 ">
         <AdminHeader />
         <AdminContainer />
       </div>

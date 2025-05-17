@@ -14,8 +14,27 @@ import {
 
 const Header: React.FC = () => {
   const [isFixed, setIsFixed] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
+    // Kiểm tra trạng thái đăng nhập
+    const checkAuth = () => {
+      const token = localStorage.getItem("token");
+      const expiration = localStorage.getItem("token_expiration");
+      const now = Date.now();
+
+      if (token && expiration && now < Number(expiration)) {
+        setIsAuthenticated(true);
+      } else {
+        setIsAuthenticated(false);
+        localStorage.removeItem("token");
+        localStorage.removeItem("token_expiration");
+      }
+    };
+
+    checkAuth();
+
+    // Kiểm tra fixed navbar khi cuộn
     const handleScroll = () => {
       if (window.scrollY > 100 && window.innerWidth >= 1024) {
         setIsFixed(true);
@@ -145,9 +164,9 @@ const Header: React.FC = () => {
               </div>
 
               <Link
-                href="/login"
+                href={isAuthenticated ? "/account" : "/login"}
                 className="hover:text-blue-500"
-                title="Đăng Nhập"
+                title={isAuthenticated ? "Tài khoản" : "Đăng Nhập"}
               >
                 <UserIcon className="w-5" />
               </Link>

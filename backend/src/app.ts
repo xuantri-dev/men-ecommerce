@@ -4,21 +4,33 @@ import mongoose from "mongoose";
 import path from "path";
 import productRoutes from "./routes/productRoutes";
 import categoryRoutes from "./routes/categoryRoutes";
+import userRoutes from "./routes/userRoutes";
 import cookieParser from "cookie-parser";
 import morgan from "morgan";
 import createError from "http-errors";
+
+import dotenv from "dotenv";
+dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
 // Middleware
-app.use(cors());
+// app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:3000", // Cho phép frontend từ localhost:3000
+    methods: ["GET", "POST", "PUT", "DELETE"], // Các phương thức được phép
+    allowedHeaders: ["Content-Type", "Authorization"], // Header được phép
+  })
+);
 app.use(express.json());
 app.use(cookieParser());
 app.use(morgan("dev"));
 
 // Kết nối MongoDB
-const MONGODB_URI = "mongodb://localhost:27017/fashion-store";
+const MONGODB_URI =
+  process.env.MONGODB_URI || "mongodb://localhost:27017/fashion-store";
 
 mongoose
   .connect(MONGODB_URI)
@@ -37,6 +49,8 @@ app.use("/images", express.static(path.join(__dirname, "../public/images")));
 app.use("/api/products", productRoutes);
 // http://localhost:5000/api/categories
 app.use("/api/categories", categoryRoutes);
+// http://localhost:5000/api/users
+app.use("/api/users", userRoutes);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {

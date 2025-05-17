@@ -1,5 +1,5 @@
 frontend
-nextjs, typescript, heroicons
+nextjs, typescript, heroicons, react-toastify, yup, hookform, tanstack, react-hook-form
 npm run dev
 trang chủ bán hàng
 http://localhost:3000/
@@ -12,6 +12,10 @@ backend
 nodejs, expressjs, path, morgan, cookieParser, createError, bcryptjs, cors, jsonwebtoken, mongoose, multer, slugify
 npm run dev
 http://localhost:5000/api/products
+admin@example.com
+123456
+admin_con1@example.com
+123456
 các chức năng làm thêm
 sản phẩm mới, sản phẩm bán chạy
 
@@ -40,6 +44,11 @@ trang chủ và các trang con thì làm <Header></Header>,<Main></Main>,<Footer
 trang admin có cần phải đăng nhập trước rồi mới vô hay là vô theo đường dẫn
 
 đang làm
+api đăng nhập, đăng kí user
+
+
+
+
 
 
 
