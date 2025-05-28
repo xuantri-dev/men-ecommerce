@@ -1,23 +1,22 @@
-import React from "react";
-import ProductCard from "@/components/ProductCard";
-import { Product } from "@/types/product";
+"use client";
+import { useFeaturedProducts } from "@/hooks/useFeaturedProducts";
+import ProductCard from "./ProductCard";
 
-interface FeaturedProductListProps {
-  products: Product[];
-}
+const FeaturedProductList = () => {
+  const { data: products, isLoading, error } = useFeaturedProducts();
 
-const FeaturedProductList: React.FC<FeaturedProductListProps> = ({
-  products,
-}) => {
+  if (isLoading) return <p>Đang tải sản phẩm nổi bật...</p>;
+  if (error) return <p>Lỗi khi tải sản phẩm nổi bật.</p>;
+
   return (
-    <div className="w-full">
+    <section>
       <h2 className="text-2xl font-bold mb-6 text-center">Sản phẩm nổi bật</h2>
-      <div className="grid gap-6 grid-cols-[repeat(auto-fit,minmax(280px,1fr))] max-w-[1320px] mx-auto px-4">
-        {products.map((product) => (
+      <div className="grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-6 max-w-[1320px] mx-auto px-4">
+        {products?.map((product) => (
           <ProductCard key={product._id} product={product} />
         ))}
       </div>
-    </div>
+    </section>
   );
 };
 

@@ -1,17 +1,22 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { EnvelopeIcon, LockClosedIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "react-toastify";
 import { useForm } from "react-hook-form";
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { LoginFormData } from "@/types/form";
 import useRedirectIfAuthenticated from "@/hooks/useRedirectIfAuthenticated";
+import Cookies from "js-cookie";
+
+interface LoginFormData {
+  email: string;
+  password: string;
+}
 
 const schema = Yup.object({
   email: Yup.string()
@@ -25,6 +30,8 @@ const schema = Yup.object({
 const LoginPage = () => {
   useRedirectIfAuthenticated();
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const [hasShownError, setHasShownError] = useState(false);
 
   const {
     register,
@@ -32,6 +39,25 @@ const LoginPage = () => {
     formState: { errors, isSubmitting },
   } = useForm<LoginFormData>({ resolver: yupResolver(schema) });
 
+  // ✅ Hiển thị toast nếu có lỗi từ query và xóa query khỏi URL
+  useEffect(() => {
+    const error = searchParams.get("error");
+
+    if (error && !hasShownError) {
+      if (error === "unauthenticated") {
+        toast.error("Vui lòng đăng nhập để tiếp tục!");
+      } else {
+        toast.error("Đã xảy ra lỗi không xác định.");
+      }
+
+      setHasShownError(true);
+
+      // ✅ Xoá query error khỏi URL bằng replace (không reload)
+      router.replace("/login");
+    }
+  }, [searchParams, hasShownError, router]);
+
+  // ✅ Hiển thị lỗi từ react-hook-form
   useEffect(() => {
     Object.values(errors).forEach((error) => {
       if (error?.message) toast.error(error.message);
@@ -44,22 +70,34 @@ const LoginPage = () => {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
+        credentials: "include",
       });
+
       const result = await res.json();
 
-      if (result.status) {
-        const expirationTime = Date.now() + 60 * 60 * 1000; // 1h
-        localStorage.setItem("token", result.token);
-        localStorage.setItem("token_expiration", expirationTime.toString());
+      if (!res.ok || !result.status) {
+        throw new Error(result.message || "Đăng nhập thất bại!");
+      }
 
-        toast.success(result.message || "Đăng nhập thành công!");
-        setTimeout(() => router.push("/"), 1500);
+      // ✅ Lưu user vào cookie (nếu cần)
+      Cookies.set("user", JSON.stringify(result.user), {
+        expires: 1 / 24,
+        secure: false,
+        sameSite: "lax",
+      });
+
+      toast.success(result.message || "Đăng nhập thành công!");
+
+      const role = result.user?.role;
+      if (role === 0 || role === 1) {
+        router.push("/admin");
       } else {
-        toast.error(result.message || "Đăng nhập thất bại!");
+        router.push("/");
       }
     } catch (err) {
-      console.error("Lỗi đăng nhập:", err);
-      toast.error("Có lỗi xảy ra, vui lòng thử lại!");
+      const errorMessage = err instanceof Error ? err.message : String(err);
+      console.error("Lỗi đăng nhập:", errorMessage);
+      toast.error(errorMessage || "Có lỗi xảy ra, vui lòng thử lại!");
     }
   };
 
@@ -80,6 +118,7 @@ const LoginPage = () => {
           <InputField
             icon={<EnvelopeIcon className="w-5 h-5 text-gray-500" />}
             placeholder="Email"
+            type="text"
             register={register("email")}
           />
           <InputField
@@ -111,9 +150,19 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+interface InputFieldProps {
+  icon: React.ReactNode;
+  placeholder: string;
+  type?: string;
+  register: any;
+}
 
-const InputField = ({ icon, placeholder, type = "text", register }: any) => (
+const InputField = ({
+  icon,
+  placeholder,
+  type = "text",
+  register,
+}: InputFieldProps) => (
   <div className="flex items-center mt-4 w-full bg-white border border-gray-300/80 h-12 rounded-full overflow-hidden pl-6 gap-2">
     {icon}
     <input
@@ -124,3 +173,5 @@ const InputField = ({ icon, placeholder, type = "text", register }: any) => (
     />
   </div>
 );
+
+export default LoginPage;

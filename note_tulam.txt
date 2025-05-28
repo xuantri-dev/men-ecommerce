@@ -1,5 +1,5 @@
 frontend
-nextjs, typescript, heroicons, react-toastify, yup, hookform, tanstack, react-hook-form
+nextjs, typescript, heroicons, react-toastify, yup, hookform, tanstack, react-hook-form, jwt-decode, js-cookie
 npm run dev
 trang chủ bán hàng
 http://localhost:3000/
@@ -20,31 +20,49 @@ các chức năng làm thêm
 sản phẩm mới, sản phẩm bán chạy
 
 
-tất cả ảnh (product, category,...) đều lưu chung 1 file img, sau chỉ cần lấy đường dẫn up lên, không cần phải chia riêng img/catgeory, img/product,...
-làm theo kiểu backend, frontend là chuẩn vì sau này khi up lên host sẽ up 2 cổng khác nhau cho 2 folder
-trong 
-hình ảnh cái nào dính đến cơ sở dữ liệu (mongodb) thì lưu trong backend, cái nào dính đến template (slider banner,...) thì lưu trong frontend
 
 git :
 tritxps28458@fpt.edu.vn
 @Xuantri1998
 https://github.com/TuiTenXT/tulam
-git init
-khởi tạo một repository Git mới trong thư mục hiện tại. Nó tạo ra một thư mục .git ẩn, nơi Git sẽ lưu trữ tất cả các thông tin về phiên bản của dự án
-git add .
-thêm tất cả các thay đổi trong thư mục hiện tại vào staging area. Staging area là nơi bạn chuẩn bị các thay đổi để commit
-git commit -m "Your commit message"
-tạo một commit mới với các thay đổi đã được thêm vào staging area. Commit là một snapshot của các thay đổi trong dự án
-git push origin main
-đẩy các commit từ nhánh main của repository cục bộ lên remote repository origin trên GitHub
+1. git pull origin main                  # Luôn cập nhật trước khi làm (có thể bỏ nếu là dự án cá nhân)
+2. git checkout -b feature/abc           # Tạo nhánh mới
+3. 
+git add .  
+git commit -m "..."      # Commit thay đổi
+4. git push origin feature/abc           # Push lên GitHub
+5. Tạo Pull Request trên GitHub
+6. Review, sửa code nếu cần
+7. Merge vào main
+8. git checkout main && git pull         # Đồng bộ máy bạn
 
+
+
+Màu nền chính (background): #EBFCFF – Màu xanh nhạt dịu nhẹ, thoáng.
+Màu nền phụ (section sáng): #CAF0F8 – Dùng cho block, card nhẹ.
+Header / Footer: #03045E – Xanh navy đậm, mạnh mẽ – tạo thương hiệu.
+Màu chủ đạo (primary button / CTA): #0077B6 – Màu xanh nổi bật để thúc đẩy hành động.
+Hover button chính: #00B4D8 – Tươi sáng, hiệu ứng hover bắt mắt.
+Accent border / separator: #EFEDCE – Màu vàng kem nhẹ, tạo cảm giác cao cấp.
+Tiêu đề văn bản: #0F214D – Đậm, rõ ràng, sang trọng.
+Văn bản phụ: #0B5FB0 – Text hỗ trợ – dễ đọc nhưng không lấn át.
+Link hover / icon hover: #2BA3EC – Nhẹ nhàng, tinh tế, dễ nhìn.
+
+
+
+tất cả ảnh (product, category,...) đều lưu chung 1 file img, sau chỉ cần lấy đường dẫn up lên, không cần phải chia riêng img/catgeory, img/product,...
+làm theo kiểu backend, frontend là chuẩn vì sau này khi up lên host sẽ up 2 cổng khác nhau cho 2 folder
+trong 
+hình ảnh cái nào dính đến cơ sở dữ liệu (mongodb) thì lưu trong backend, cái nào dính đến template (slider banner,...) thì lưu trong frontend
+
+những thứ cần làm
+logo nên thay thành svg
+tách controller ra thành controller và services
 
 *những thứ cần hỏi
-trang chủ và các trang con thì làm <Header></Header>,<Main></Main>,<Footer></Footer> rồi trong <Main></Main> sẽ là các component hay bỏ luôn <Main></Main>, chỉ cầm các component để ở giữa thôi
-trang admin có cần phải đăng nhập trước rồi mới vô hay là vô theo đường dẫn
 
-đang làm
-api đăng nhập, đăng kí user
+
+
 
 
 

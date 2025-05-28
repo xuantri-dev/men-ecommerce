@@ -1,7 +1,9 @@
+// Lấy danh sách sản phẩm, chi tiết sản phẩm, thêm/sửa/xóa
 import axios from "axios";
+import { Product } from "@/types/product";
 
 // Gọi API danh sách sản phẩm
-export const fetchProducts = async (token?: string) => {
+export const fetchProducts = async (token?: string): Promise<Product[]> => {
   try {
     const response = await axios.get("http://localhost:5000/api/products", {
       headers: {
@@ -19,7 +21,7 @@ export const fetchProducts = async (token?: string) => {
 
 // khai báo hàm fetchFeaturedProducts để lấy danh sách sản phẩm nổi bật từ API
 // Hàm này sẽ trả về một Promise chứa dữ liệu sản phẩm nổi bật
-export const fetchFeaturedProducts = async () => {
+export const fetchFeaturedProducts = async (): Promise<Product[]> => {
   // sử dụng try và catch để xử lý lỗi khi thực hiện yêu cầu
   try {
     // thực hiện yêu cầu GET đến API để lấy danh sách sản phẩm nổi bật
@@ -35,6 +37,24 @@ export const fetchFeaturedProducts = async () => {
     return response.data;
   } catch (error) {
     console.error("Error fetching featured products:", error);
+    throw error;
+  }
+};
+
+// Lấy chi tiết sản phẩm theo ID
+export const fetchProductById = async (id: string): Promise<Product> => {
+  try {
+    const response = await axios.get(
+      `http://localhost:5000/api/products/${id}`
+    );
+
+    if (!response.data) {
+      throw new Error("No product data found");
+    }
+
+    return response.data;
+  } catch (error) {
+    console.error(`Error fetching product with ID ${id}:`, error);
     throw error;
   }
 };
