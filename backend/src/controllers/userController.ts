@@ -73,18 +73,35 @@ export const loginUser = async (req: Request, res: Response): Promise<void> => {
       throw new Error("JWT_SECRET is not defined in environment variables");
     }
 
-    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
-      expiresIn: "1h",
-    });
+    const token = jwt.sign(
+      { userId: user._id, role: user.role },
+      process.env.JWT_SECRET,
+      { expiresIn: "1h" }
+    );
 
     const { password: _, ...userWithoutPassword } = user.toObject();
 
-    res.status(200).json({
-      status: true,
-      message: "Đăng nhập thành công",
-      token,
-      user: userWithoutPassword,
-    });
+    console.log("Setting cookie token:", token);
+    // Lưu thông tin người dùng vào cookie 'user'
+    res
+      .cookie("token", token, {
+        httpOnly: true,
+        secure: false,
+        sameSite: "lax",
+        maxAge: 60 * 60 * 1000,
+      })
+      .cookie("user", JSON.stringify(userWithoutPassword), {
+        httpOnly: false,
+        secure: false,
+        sameSite: "lax",
+        maxAge: 60 * 60 * 1000,
+      })
+      .status(200)
+      .json({
+        status: true,
+        message: "Đăng nhập thành công",
+        user: userWithoutPassword,
+      });
   } catch (error) {
     res.status(500).json({
       status: false,
@@ -121,7 +138,6 @@ export const getCurrentUser = async (
 ): Promise<void> => {
   try {
     const userId = req.user?.userId;
-    console.log("User ID from token:", userId); // Debug
     if (!userId) {
       res
         .status(401)
@@ -130,7 +146,6 @@ export const getCurrentUser = async (
     }
 
     const user = await User.findById(userId).select("-password");
-    console.log("User from DB:", user); // Debug
     if (!user) {
       res
         .status(404)
@@ -140,10 +155,10 @@ export const getCurrentUser = async (
 
     res.status(200).json({ status: true, user });
   } catch (error) {
-    console.error("Lỗi khi lấy thông tin user:", error); // Log chi tiết lỗi
+    console.error("Lỗi khi lấy thông tin user:", error);
     res.status(500).json({
       status: false,
-      message: "Lỗi lấy thông tin người dùng sau khi đăng nhập",
+      message: "Lỗi lấy thông tin người dùng",
     });
   }
 };
@@ -236,6 +251,40 @@ export const updateUserInfo = async (
     res.status(500).json({
       status: false,
       message: error.message || "Lỗi cập nhật thông tin người dùng",
+    });
+  }
+};
+
+// Đăng xuất người dùng
+export const logoutUser = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  try {
+    // Xóa cả cookie 'token' và 'user'
+    res
+      .cookie("token", "", {
+        httpOnly: true,
+        secure: false,
+        sameSite: "lax",
+        expires: new Date(0),
+      })
+      .cookie("user", "", {
+        httpOnly: false,
+        secure: false,
+        sameSite: "lax",
+        expires: new Date(0),
+      });
+
+    res.status(200).json({
+      status: true,
+      message: "Đăng xuất thành công",
+    });
+  } catch (error: any) {
+    console.error("Lỗi khi đăng xuất:", error);
+    res.status(500).json({
+      status: false,
+      message: error.message || "Lỗi khi đăng xuất",
     });
   }
 };

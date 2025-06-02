@@ -6,6 +6,7 @@ import {
   deleteUser,
   getCurrentUser,
   updateUserInfo,
+  logoutUser,
 } from "../controllers/userController";
 import { verifyToken } from "../middlewares/authMiddleware";
 
@@ -18,5 +19,6 @@ router.get("/me", verifyToken, getCurrentUser);
 router.get("/:id", verifyToken, getUserById);
 router.delete("/:id", verifyToken, deleteUser);
 router.put("/update", verifyToken, updateUserInfo);
+router.post("/logout", logoutUser);
 
 export default router;

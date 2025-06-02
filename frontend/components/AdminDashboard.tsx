@@ -1,13 +1,14 @@
 import React from "react";
 import AdminSidebar from "./AdminSidebar";
-import AdminContainer from "./AdminContainer";
 import AdminHeader from "./AdminHeader";
+import AdminContainer from "./AdminContainer";
 
 const AdminDashboard: React.FC = () => {
   return (
-    <div className="flex min-h-screen">
+    <div className="min-h-screen flex">
       <AdminSidebar />
-      <div className="flex-1 ">
+      {/* content area: padding‑left 64 px khi ≥ md để tránh tràn dưới sidebar */}
+      <div className="flex-1 pl-0 md:pl-64 flex flex-col">
         <AdminHeader />
         <AdminContainer />
       </div>

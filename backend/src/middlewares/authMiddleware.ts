@@ -3,8 +3,9 @@ import jwt from "jsonwebtoken";
 
 interface DecodedToken {
   userId: string;
-  iat?: number; // Issued at (optional)
-  exp?: number; // Expiration (optional)
+  role: number;
+  iat?: number;
+  exp?: number;
 }
 
 export const verifyToken = (
@@ -12,41 +13,39 @@ export const verifyToken = (
   res: Response,
   next: NextFunction
 ): void => {
-  const authHeader = req.headers.authorization;
+  console.log("Request headers:", req.headers);
+  console.log("Cookies:", req.cookies);
 
-  // Kiểm tra header Authorization
-  if (!authHeader || !authHeader.startsWith("Bearer ")) {
-    res.status(401).json({
-      status: false,
-      message: "Token không tồn tại hoặc không đúng định dạng",
-    });
-    return;
+  let token;
+  if (req.cookies?.token) {
+    token = req.cookies.token;
+  } else if (req.headers.authorization?.startsWith("Bearer ")) {
+    token = req.headers.authorization.split(" ")[1];
   }
 
-  const token = authHeader.split(" ")[1];
-
-  // Kiểm tra JWT_SECRET
-  if (!process.env.JWT_SECRET) {
-    res.status(500).json({
+  if (!token) {
+    console.error("No token found");
+    res.status(401).json({
       status: false,
-      message: "Lỗi cấu hình server: JWT_SECRET không được định nghĩa",
+      message: "Không tìm thấy token trong cookie hoặc header",
     });
     return;
   }
 
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET) as DecodedToken;
-    (req as any).user = decoded; // Gắn decoded token vào req.user
+    const decoded = jwt.verify(
+      token,
+      process.env.JWT_SECRET as string
+    ) as unknown as DecodedToken;
+    console.log("Decoded token:", decoded);
+    req.user = decoded;
     next();
   } catch (error) {
-    if (error instanceof jwt.TokenExpiredError) {
-      res.status(401).json({ status: false, message: "Token đã hết hạn" });
-    } else if (error instanceof jwt.JsonWebTokenError) {
-      res.status(401).json({ status: false, message: "Token không hợp lệ" });
-    } else {
-      res
-        .status(401)
-        .json({ status: false, message: "Xác thực token thất bại" });
-    }
+    console.error("JWT verification error:", error);
+    res.status(401).json({
+      status: false,
+      message: "Token không hợp lệ hoặc đã hết hạn",
+      error: error instanceof Error ? error.message : String(error),
+    });
   }
 };

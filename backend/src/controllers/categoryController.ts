@@ -59,6 +59,16 @@ export const addCategory = async (
     const { name } = req.body;
     const slug = slugify(name, { lower: true, remove: /[*+~.()'"!:@]/g });
 
+    // ✅ Kiểm tra tên danh mục đã tồn tại chưa
+    const existingCategory = await Category.findOne({ name });
+    if (existingCategory) {
+      res.status(400).json({
+        status: false,
+        message: "Tên danh mục đã tồn tại",
+      });
+      return;
+    }
+
     // Kiểm tra xem file đã được upload thành công chưa
     if (!req.file) {
       res.status(400).json({ status: false, message: "Vui lòng chọn ảnh" });
@@ -120,6 +130,55 @@ export const deleteCategory = async (
     res.status(500).json({
       status: false,
       message: error.message || "Lỗi xóa danh mục",
+    });
+  }
+};
+
+export const updateCategory = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  try {
+    const { id } = req.params;
+    const { name } = req.body;
+
+    // Kiểm tra danh mục có tồn tại không
+    const category = await Category.findById(id);
+    if (!category) {
+      res
+        .status(404)
+        .json({ status: false, message: "Danh mục không tồn tại" });
+      return;
+    }
+
+    // Nếu có tên mới, cập nhật slug
+    if (name) {
+      const slug = slugify(name, { lower: true, remove: /[*+~.()'"!:@]/g });
+
+      // Kiểm tra tên danh mục mới đã tồn tại chưa (trừ chính nó)
+      const existing = await Category.findOne({ name, _id: { $ne: id } });
+      if (existing) {
+        res
+          .status(400)
+          .json({ status: false, message: "Tên danh mục đã tồn tại" });
+        return;
+      }
+
+      category.name = name;
+      category.slug = slug;
+    }
+
+    // Nếu có file ảnh mới thì cập nhật
+    if (req.file) {
+      category.image = `/images/${req.file.filename}`;
+    }
+
+    const updatedCategory = await category.save();
+    res.status(200).json({ status: true, result: updatedCategory });
+  } catch (error: any) {
+    res.status(500).json({
+      status: false,
+      message: error.message || "Lỗi cập nhật danh mục",
     });
   }
 };

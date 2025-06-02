@@ -9,3 +9,10 @@ export interface LoginFormData {
   email: string;
   password: string;
 }
+
+export interface UpdateUserForm {
+  fullName: string;
+  email: string;
+  password?: string;
+  confirmPassword?: string;
+}

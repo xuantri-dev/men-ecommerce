@@ -1,60 +1,57 @@
-// định nghĩa thành phần trang chính của ứng dụng Next.js
-// Sử dụng React Query để lấy dữ liệu sản phẩm từ API và hiển thị chúng bằng thành phần ProductList. Xử lý trạng thái tải và lỗi khi lấy dữ liệu
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
+
 import Header from "@/components/Header";
+import Footer from "@/components/Footer";
+import Slider from "@/components/Slider";
+import Marquee from "@/components/Marquee";
 import AllProductList from "@/components/AllProductList";
 import FeaturedProductList from "@/components/FeaturedProductList";
-import Slider from "@/components/Slider";
-import { fetchProducts, fetchFeaturedProducts } from "@/services/api";
-import { useQuery } from "@tanstack/react-query";
-import Footer from "@/components/Footer";
-import Marquee from "@/components/Marquee";
+import { useSearchParams, useRouter } from "next/navigation";
+import { toast } from "react-toastify";
 
-export default function Home() {
-  const {
-    data: products,
-    error,
-    isLoading,
-  } = useQuery({
-    queryKey: ["products"],
-    queryFn: fetchProducts,
-  });
+export default function HomePage() {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const error = searchParams.get("error");
 
-  const {
-    data: featuredProducts,
-    error: featuredProductsError,
-    isLoading: featuredProductsLoading,
-  } = useQuery({
-    queryKey: ["featuredProducts"],
-    queryFn: fetchFeaturedProducts,
-  });
+  useEffect(() => {
+    if (error) {
+      switch (error) {
+        case "unauthorized":
+          toast.error("Bạn không có quyền truy cập trang admin");
+          break;
+        case "unauthenticated":
+          toast.error("Vui lòng đăng nhập để tiếp tục");
+          break;
+        case "token_expired":
+          toast.error("Phiên đăng nhập đã hết hạn, vui lòng đăng nhập lại");
+          break;
+        case "invalid_token":
+          toast.error("Token không hợp lệ, vui lòng đăng nhập lại");
+          break;
+        default:
+          toast.error("Lỗi không xác định");
+          break;
+      }
 
-  if (isLoading)
-    return (
-      <div className="flex justify-center items-center min-h-screen">
-        Loading...
-      </div>
-    );
-  if (error)
-    return (
-      <div className="flex justify-center items-center min-h-screen">
-        Error loading products
-      </div>
-    );
+      // ✅ Xoá query khỏi URL sau khi xử lý (không reload lại trang)
+      router.replace("/");
+    }
+  }, [error, router]);
 
   return (
-    <div>
-      <Marquee></Marquee>
+    <div className="bg-white text-black font-[var(--font-geist-sans)]">
+      <Marquee />
       <Header />
-      <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)] bg-white text-black">
-        <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-          <Slider></Slider>
-          <AllProductList products={products} />
-          <FeaturedProductList products={featuredProducts || []} />
-        </main>
-      </div>
+
+      <main className="min-h-screen px-4 sm:px-20 py-10 sm:py-20 flex flex-col gap-16 items-center">
+        <Slider />
+        <AllProductList />
+        <FeaturedProductList />
+      </main>
+
       <Footer />
     </div>
   );

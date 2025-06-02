@@ -20,6 +20,9 @@ export const metadata = {
   title: "Thời Trang Nam Cao Cấp",
   description:
     "Khám phá bộ sưu tập thời trang nam cao cấp với các sản phẩm chất lượng và phong cách hiện đại.",
+  icons: {
+    icon: "/favicon.ico",
+  },
 };
 
 export default function RootLayout({

@@ -11,30 +11,27 @@ import {
   ShoppingBagIcon,
   HomeModernIcon,
 } from "@heroicons/react/24/outline";
+import Cookies from "js-cookie"; // Thêm import Cookies
+
+import { User } from "@/types/user";
 
 const Header: React.FC = () => {
   const [isFixed, setIsFixed] = useState(false);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
-    // Kiểm tra trạng thái đăng nhập
-    const checkAuth = () => {
-      const token = localStorage.getItem("token");
-      const expiration = localStorage.getItem("token_expiration");
-      const now = Date.now();
-
-      if (token && expiration && now < Number(expiration)) {
-        setIsAuthenticated(true);
-      } else {
-        setIsAuthenticated(false);
-        localStorage.removeItem("token");
-        localStorage.removeItem("token_expiration");
+    // Lấy thông tin người dùng từ cookie 'user'
+    const userCookie = Cookies.get("user");
+    if (userCookie) {
+      try {
+        setUser(JSON.parse(userCookie));
+      } catch {
+        setUser(null);
       }
-    };
+    } else {
+      setUser(null);
+    }
 
-    checkAuth();
-
-    // Kiểm tra fixed navbar khi cuộn
     const handleScroll = () => {
       if (window.scrollY > 100 && window.innerWidth >= 1024) {
         setIsFixed(true);
@@ -47,12 +44,15 @@ const Header: React.FC = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  const handleLogout = () => {
+    Cookies.remove("user"); // Xóa cookie 'user'
+    setUser(null);
+    window.location.href = "/login";
+  };
+
   return (
     <>
-      {/* Dummy padding để tránh che top bar khi navbar fixed */}
-      {isFixed && (
-        <div className="h-[80px] lg:h-[90px]"></div> // chiều cao đúng bằng navbar
-      )}
+      {isFixed && <div className="h-[80px] lg:h-[90px]"></div>}
 
       <header className="bg-white text-[#171717] border-b border-gray-200">
         {/* Top Info Bar */}
@@ -106,8 +106,8 @@ const Header: React.FC = () => {
             {/* Nav Menu */}
             <ul className="hidden md:flex flex-1 justify-center space-x-8 font-medium items-center">
               <li>
-                <Link href="/shop" className="hover:text-blue-500">
-                  Sản Phẩm Mới
+                <Link href="/featured" className="hover:text-blue-500">
+                  Sản Phẩm Hot
                 </Link>
               </li>
               <li>
@@ -115,34 +115,21 @@ const Header: React.FC = () => {
                   Khuyến Mãi
                 </Link>
               </li>
-
-              <li className="relative group">
-                <Link
-                  href="/shop"
-                  className="flex items-center hover:text-blue-500"
-                >
-                  Áo <i className="bx bxs-chevron-down ml-1"></i>
+              <li>
+                <Link href="/shop" className="hover:text-blue-500">
+                  Áo
                 </Link>
               </li>
-
-              <li className="relative group">
-                <Link
-                  href="/shop"
-                  className="flex items-center hover:text-blue-500"
-                >
-                  Quần <i className="bx bxs-chevron-down ml-1"></i>
+              <li>
+                <Link href="/shop" className="hover:text-blue-500">
+                  Quần
                 </Link>
               </li>
-
-              <li className="relative group">
-                <Link
-                  href="/shop"
-                  className="flex items-center hover:text-blue-500"
-                >
-                  Phụ Kiện <i className="bx bxs-chevron-down ml-1"></i>
+              <li>
+                <Link href="/shop" className="hover:text-blue-500">
+                  Phụ Kiện
                 </Link>
               </li>
-
               <li>
                 <Link href="/contact" className="hover:text-blue-500">
                   Liên Hệ
@@ -158,18 +145,28 @@ const Header: React.FC = () => {
                   placeholder="Sản phẩm cần tìm..."
                   className="bg-transparent text-sm outline-none text-gray-800 placeholder-gray-400 w-38"
                 />
-                <button className="rounded-full transition cursor-pointer ">
+                <button className="rounded-full transition cursor-pointer">
                   <MagnifyingGlassIcon className="w-5 h-5 text-gray-500 hover:text-blue-700" />
                 </button>
               </div>
 
-              <Link
-                href={isAuthenticated ? "/account" : "/login"}
-                className="hover:text-blue-500"
-                title={isAuthenticated ? "Tài khoản" : "Đăng Nhập"}
-              >
-                <UserIcon className="w-5" />
-              </Link>
+              {user ? (
+                <Link
+                  href="/account"
+                  className="hover:text-blue-500"
+                  title="Tài khoản"
+                >
+                  <UserIcon className="w-5" />
+                </Link>
+              ) : (
+                <Link
+                  href="/login"
+                  className="hover:text-blue-500"
+                  title="Đăng Nhập"
+                >
+                  <UserIcon className="w-5" />
+                </Link>
+              )}
 
               <Link
                 href="/cart"

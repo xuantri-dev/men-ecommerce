@@ -4,6 +4,7 @@ import {
   getCategoryById,
   addCategory,
   deleteCategory,
+  updateCategory,
 } from "../controllers/categoryController";
 import { upload } from "../controllers/categoryController";
 
@@ -14,5 +15,6 @@ router.get("/", getAllCate);
 router.post("/addcate", upload.single("image"), addCategory);
 router.delete("/deletecate/:id", deleteCategory);
 router.get("/:id", getCategoryById);
+router.put("/updatecate/:id", upload.single("image"), updateCategory);
 
 export default router;

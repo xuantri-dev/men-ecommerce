@@ -1,18 +1,15 @@
-// import thư viện axios để thực hiện các yêu cầu HTTP
 import axios from "axios";
 
-// khai báo hàm fetchProducts để lấy danh sách sản phẩm từ API
-// Hàm này sẽ trả về một Promise chứa dữ liệu sản phẩm
-export const fetchProducts = async () => {
-  // sử dụng try và catch để xử lý lỗi khi thực hiện yêu cầu
+// Gọi API danh sách sản phẩm
+export const fetchProducts = async (token?: string) => {
   try {
-    // thực hiện yêu cầu GET đến API để lấy danh sách sản phẩm
-    const response = await axios.get("http://localhost:5000/api/products");
-    // kiểm tra xem phản hồi có dữ liệu hay không
-    if (!response.data) {
-      throw new Error("No data found");
-    }
-    // nếu có dữ liệu, trả về dữ liệu sản phẩm
+    const response = await axios.get("http://localhost:5000/api/products", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!response.data) throw new Error("No data found");
     return response.data;
   } catch (error) {
     console.error("Error fetching products:", error);
