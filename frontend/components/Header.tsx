@@ -13,11 +13,7 @@ import {
 } from "@heroicons/react/24/outline";
 import Cookies from "js-cookie"; // Thêm import Cookies
 
-interface User {
-  fullName?: string;
-  email?: string;
-  role?: number;
-}
+import { User } from "@/types/user";
 
 const Header: React.FC = () => {
   const [isFixed, setIsFixed] = useState(false);

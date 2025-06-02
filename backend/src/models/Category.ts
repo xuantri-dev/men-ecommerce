@@ -11,6 +11,7 @@ const CategorySchema: Schema = new mongoose.Schema(
     name: {
       type: String,
       required: [true, "Nhập thiếu tên danh mục"],
+      unique: true,
     },
     slug: {
       type: String,

@@ -5,9 +5,13 @@ import AdminHeader from "@/components/AdminHeader";
 import { getImageUrl } from "@/lib/getImageUrl";
 import { Product } from "@/types/product";
 import { Category } from "@/types/category";
-import { fetchProducts } from "@/services/product.service";
+import { fetchProducts, deleteProduct } from "@/services/product.service";
 import { fetchCategories } from "@/services/category.service";
 import AddProductForm from "@/components/AddProductForm";
+import {
+  toggleProductVisibility,
+  toggleProductFeatured,
+} from "@/services/product.service";
 
 const ProductsPage: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
@@ -18,6 +22,49 @@ const ProductsPage: React.FC = () => {
 
   const handleAddProduct = (newProduct: Product) => {
     setProducts((prev) => [newProduct, ...prev]);
+  };
+
+  const handleDeleteProduct = async (id: string) => {
+    if (!window.confirm("Bạn có chắc chắn muốn xóa sản phẩm này?")) return;
+
+    try {
+      const token = localStorage.getItem("token") || "";
+      await deleteProduct(id, token);
+      setProducts((prev) => prev.filter((product) => product._id !== id));
+    } catch (err) {
+      alert("Xóa sản phẩm thất bại");
+      console.error(err);
+    }
+  };
+
+  const handleToggleVisibility = async (id: string) => {
+    try {
+      const token = localStorage.getItem("token") || "";
+      const updated = await toggleProductVisibility(id, token);
+      setProducts((prev) =>
+        prev.map((p) =>
+          p._id === id ? { ...p, isHidden: updated.isHidden } : p
+        )
+      );
+    } catch (err) {
+      alert("Không thể cập nhật trạng thái hiển thị.");
+      console.error(err);
+    }
+  };
+
+  const handleToggleFeatured = async (id: string) => {
+    try {
+      const token = localStorage.getItem("token") || "";
+      const updated = await toggleProductFeatured(id, token);
+      setProducts((prev) =>
+        prev.map((p) =>
+          p._id === id ? { ...p, featured: updated.featured } : p
+        )
+      );
+    } catch (err) {
+      alert("Không thể cập nhật trạng thái nổi bật.");
+      console.error(err);
+    }
   };
 
   useEffect(() => {
@@ -153,7 +200,10 @@ const ProductsPage: React.FC = () => {
                         <button className="text-blue-500 hover:underline mr-4 cursor-pointer">
                           Sửa
                         </button>
-                        <button className="text-red-500 hover:underline cursor-pointer">
+                        <button
+                          onClick={() => handleDeleteProduct(product._id)}
+                          className="text-red-500 hover:underline cursor-pointer"
+                        >
                           Xóa
                         </button>
                       </td>

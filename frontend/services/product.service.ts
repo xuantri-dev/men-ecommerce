@@ -58,3 +58,49 @@ export const fetchProductById = async (id: string): Promise<Product> => {
     throw error;
   }
 };
+
+export const deleteProduct = async (id: string, token: string) => {
+  const res = await fetch(
+    `http://localhost:5000/api/products/deletepro/${id}`,
+    {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+
+  if (!res.ok) {
+    throw new Error("Không thể xóa sản phẩm");
+  }
+
+  return res.json();
+};
+
+export const toggleProductVisibility = async (id: string, token: string) => {
+  const res = await fetch(
+    `http://localhost:5000/api/products/${id}/toggle-visibility`,
+    {
+      method: "PATCH",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+  if (!res.ok) throw new Error("Toggle visibility failed");
+  return res.json();
+};
+
+export const toggleProductFeatured = async (id: string, token: string) => {
+  const res = await fetch(
+    `http://localhost:5000/api/products/${id}/toggle-featured`,
+    {
+      method: "PATCH",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+  if (!res.ok) throw new Error("Toggle featured failed");
+  return res.json();
+};

@@ -280,7 +280,7 @@ const AddProductForm: React.FC<AddProductFormProps> = ({
                   <button
                     type="button"
                     onClick={() => handleRemoveTag("sizes", index)}
-                    className="text-red-500 hover:text-red-700"
+                    className="text-red-500 hover:text-red-700 cursor-pointer"
                   >
                     ×
                   </button>

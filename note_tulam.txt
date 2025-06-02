@@ -55,9 +55,6 @@ làm theo kiểu backend, frontend là chuẩn vì sau này khi up lên host s�
 trong 
 hình ảnh cái nào dính đến cơ sở dữ liệu (mongodb) thì lưu trong backend, cái nào dính đến template (slider banner,...) thì lưu trong frontend
 
-những thứ cần làm
-logo nên thay thành svg
-tách controller ra thành controller và services
 
 *những thứ cần hỏi
 

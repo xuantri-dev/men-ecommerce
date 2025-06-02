@@ -104,6 +104,16 @@ export const addProduct = async (
       return;
     }
 
+    // Kiểm tra sản phẩm có bị trùng tên không
+    const existingProduct = await Product.findOne({ name: name.trim() });
+    if (existingProduct) {
+      res.status(400).json({
+        status: false,
+        message: "Sản phẩm đã tồn tại",
+      });
+      return;
+    }
+
     // Tạo mới sản phẩm
     const newProduct = new Product({
       name,

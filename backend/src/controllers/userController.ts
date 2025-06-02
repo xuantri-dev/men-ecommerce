@@ -132,38 +132,6 @@ export const getUserById = async (
 };
 
 // Lấy thông tin người dùng hiện tại (dựa trên token)
-// export const getCurrentUser = async (
-//   req: Request,
-//   res: Response
-// ): Promise<void> => {
-//   try {
-//     const userId = req.user?.userId;
-//     console.log("User ID from token:", userId); // Debug
-//     if (!userId) {
-//       res
-//         .status(401)
-//         .json({ status: false, message: "Không có thông tin người dùng" });
-//       return;
-//     }
-
-//     const user = await User.findById(userId).select("-password");
-//     console.log("User from DB:", user); // Debug
-//     if (!user) {
-//       res
-//         .status(404)
-//         .json({ status: false, message: "Người dùng không tồn tại" });
-//       return;
-//     }
-
-//     res.status(200).json({ status: true, user });
-//   } catch (error) {
-//     console.error("Lỗi khi lấy thông tin user:", error); // Log chi tiết lỗi
-//     res.status(500).json({
-//       status: false,
-//       message: "Lỗi lấy thông tin người dùng sau khi đăng nhập",
-//     });
-//   }
-// };
 export const getCurrentUser = async (
   req: Request,
   res: Response
@@ -288,31 +256,6 @@ export const updateUserInfo = async (
 };
 
 // Đăng xuất người dùng
-// export const logoutUser = async (
-//   req: Request,
-//   res: Response
-// ): Promise<void> => {
-//   try {
-//     // Xóa cookie 'token' bằng cách đặt giá trị rỗng và thời gian hết hạn trong quá khứ
-//     res.cookie("token", "", {
-//       httpOnly: true,
-//       secure: false, // Phải khớp với cấu hình trong loginUser
-//       sameSite: "lax", // Phải khớp với cấu hình trong loginUser
-//       expires: new Date(0), // Đặt thời gian hết hạn về quá khứ
-//     });
-
-//     res.status(200).json({
-//       status: true,
-//       message: "Đăng xuất thành công",
-//     });
-//   } catch (error: any) {
-//     console.error("Lỗi khi đăng xuất:", error);
-//     res.status(500).json({
-//       status: false,
-//       message: error.message || "Lỗi khi đăng xuất",
-//     });
-//   }
-// };
 export const logoutUser = async (
   req: Request,
   res: Response
