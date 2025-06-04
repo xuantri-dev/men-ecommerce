@@ -1,21 +1,24 @@
 "use client";
+
 import React, { useState, useEffect } from "react";
 import AdminSidebar from "@/components/AdminSidebar";
 import AdminHeader from "@/components/AdminHeader";
 import { getImageUrl } from "@/lib/getImageUrl";
 import { Product } from "@/types/product";
 import { Category } from "@/types/category";
-import { fetchProducts, deleteProduct } from "@/services/product.service";
-import { fetchCategories } from "@/services/category.service";
-import AddProductForm from "@/components/AddProductForm";
 import {
+  fetchProducts,
+  deleteProduct,
   toggleProductVisibility,
   toggleProductFeatured,
 } from "@/services/product.service";
+import { fetchCategories } from "@/services/category.service";
+import AddProductForm from "@/components/AddProductForm";
+import { toast } from "react-toastify";
 
 const ProductsPage: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
-  const [categories, setCategories] = useState<Category[]>([]); // State cho danh mục
+  const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [showAddForm, setShowAddForm] = useState(false);
@@ -25,14 +28,16 @@ const ProductsPage: React.FC = () => {
   };
 
   const handleDeleteProduct = async (id: string) => {
-    if (!window.confirm("Bạn có chắc chắn muốn xóa sản phẩm này?")) return;
+    const confirm = window.confirm("Bạn có chắc chắn muốn xóa sản phẩm này?");
+    if (!confirm) return;
 
     try {
       const token = localStorage.getItem("token") || "";
       await deleteProduct(id, token);
       setProducts((prev) => prev.filter((product) => product._id !== id));
+      toast.success("Đã xóa sản phẩm thành công!");
     } catch (err) {
-      alert("Xóa sản phẩm thất bại");
+      toast.error("Xóa sản phẩm thất bại!");
       console.error(err);
     }
   };
@@ -46,8 +51,9 @@ const ProductsPage: React.FC = () => {
           p._id === id ? { ...p, isHidden: updated.isHidden } : p
         )
       );
+      toast.success("Cập nhật trạng thái hiển thị thành công!");
     } catch (err) {
-      alert("Không thể cập nhật trạng thái hiển thị.");
+      toast.error("Không thể cập nhật trạng thái hiển thị.");
       console.error(err);
     }
   };
@@ -61,8 +67,9 @@ const ProductsPage: React.FC = () => {
           p._id === id ? { ...p, featured: updated.featured } : p
         )
       );
+      toast.success("Cập nhật trạng thái nổi bật thành công!");
     } catch (err) {
-      alert("Không thể cập nhật trạng thái nổi bật.");
+      toast.error("Không thể cập nhật trạng thái nổi bật.");
       console.error(err);
     }
   };
@@ -179,22 +186,32 @@ const ProductsPage: React.FC = () => {
                         {getCategoryNameById(product.category)}
                       </td>
                       <td className="p-4 text-gray-900 dark:text-white">
-                        {product.isHidden ? (
-                          <span className="text-red-500 font-medium">Ẩn</span>
-                        ) : (
-                          <span className="text-green-600 font-medium">
-                            Hiển thị
-                          </span>
-                        )}
+                        <button
+                          onClick={() => handleToggleVisibility(product._id)}
+                          className="underline hover:text-blue-600"
+                        >
+                          {product.isHidden ? (
+                            <span className="text-red-500 font-medium">Ẩn</span>
+                          ) : (
+                            <span className="text-green-600 font-medium">
+                              Hiển thị
+                            </span>
+                          )}
+                        </button>
                       </td>
                       <td className="p-4 text-gray-900 dark:text-white">
-                        {product.featured ? (
-                          <span className="text-yellow-700 font-medium">
-                            Có
-                          </span>
-                        ) : (
-                          <span className="text-gray-500">Không</span>
-                        )}
+                        <button
+                          onClick={() => handleToggleFeatured(product._id)}
+                          className="underline hover:text-blue-600"
+                        >
+                          {product.featured ? (
+                            <span className="text-yellow-700 font-medium">
+                              Có
+                            </span>
+                          ) : (
+                            <span className="text-gray-500">Không</span>
+                          )}
+                        </button>
                       </td>
                       <td className="p-4">
                         <button className="text-blue-500 hover:underline mr-4 cursor-pointer">

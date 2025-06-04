@@ -4,6 +4,8 @@ import Category from "../models/Category";
 import mongoose from "mongoose";
 import multer from "multer";
 import path from "path";
+import fs from "fs";
+import fsPromises from "fs/promises";
 
 export const getProducts = async (
   req: Request,
@@ -181,6 +183,17 @@ export const getProductsByCategory = async (
   }
 };
 
+const deleteProductImages = async (imagePaths: string[]) => {
+  for (const imagePath of imagePaths) {
+    const fullPath = path.join(__dirname, "../../public", imagePath);
+    try {
+      await fsPromises.unlink(fullPath);
+    } catch (err) {
+      console.error(`Lỗi khi xóa ảnh: ${fullPath}`, err);
+    }
+  }
+};
+
 export const deleteProduct = async (
   req: Request,
   res: Response
@@ -196,15 +209,17 @@ export const deleteProduct = async (
       return;
     }
 
-    // Tìm và xóa sản phẩm
-    const deletedProduct = await Product.findByIdAndDelete(id);
+    const product = await Product.findById(id);
 
-    if (!deletedProduct) {
+    if (!product) {
       res
         .status(404)
         .json({ status: false, message: "Không tìm thấy sản phẩm" });
       return;
     }
+
+    await deleteProductImages(product.images);
+    await Product.findByIdAndDelete(id);
 
     res.status(200).json({
       status: true,
