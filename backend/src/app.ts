@@ -29,8 +29,10 @@ app.use(cookieParser());
 app.use(morgan("dev"));
 
 // Kết nối MongoDB
-const MONGODB_URI =
-  process.env.MONGODB_URI || "mongodb://localhost:27017/fashion-store";
+// const MONGODB_URI =
+//   process.env.MONGODB_URI || "mongodb://localhost:27017/fashion-store";
+
+const MONGODB_URI = "mongodb://localhost:27017/fashion-store";
 
 mongoose
   .connect(MONGODB_URI)
