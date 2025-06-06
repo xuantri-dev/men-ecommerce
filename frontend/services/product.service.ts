@@ -104,3 +104,37 @@ export const toggleProductFeatured = async (id: string, token: string) => {
   if (!res.ok) throw new Error("Toggle featured failed");
   return res.json();
 };
+
+// Cập nhật sản phẩm
+export const updateProduct = async (
+  id: string,
+  data: FormData,
+  token: string
+): Promise<Product> => {
+  try {
+    const res = await fetch(
+      `http://localhost:5000/api/products/updateproduct/${id}`,
+      {
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        body: data,
+      }
+    );
+
+    if (!res.ok) {
+      throw new Error("Cập nhật sản phẩm thất bại");
+    }
+
+    const updatedProduct = await res.json();
+    if (!updatedProduct) {
+      throw new Error("Không có dữ liệu sản phẩm được trả về");
+    }
+
+    return updatedProduct;
+  } catch (error) {
+    console.error(`Error updating product with ID ${id}:`, error);
+    throw error;
+  }
+};

@@ -1,7 +1,7 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { Category } from "@/types/category";
-import { useState, useEffect, useRef } from "react";
 import { Product } from "@/types/product";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { useForm } from "react-hook-form";
@@ -9,11 +9,13 @@ import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { toast } from "react-toastify";
 import { ProductFormValues } from "@/types/forms/product";
+import { updateProduct } from "@/services/product.service";
 
-interface AddProductFormProps {
+interface EditProductFormProps {
   categories: Category[];
+  initialProduct: Product;
   onClose: () => void;
-  onAdd: (product: Product) => void;
+  onUpdate: (product: Product) => void;
 }
 
 const schema = Yup.object({
@@ -24,18 +26,16 @@ const schema = Yup.object({
   category: Yup.string().required("Vui lòng chọn danh mục"),
   featured: Yup.boolean().required(),
   isHidden: Yup.boolean().required(),
-  images: Yup.array()
-    .of(Yup.mixed<File>().required())
-    .min(1, "Cần ít nhất 1 hình ảnh")
-    .required("Cần ít nhất 1 hình ảnh"),
+  images: Yup.array().of(Yup.mixed<File>().required()).default([]),
   sizes: Yup.array().of(Yup.string().required()).required(),
   colors: Yup.array().of(Yup.string().required()).required(),
 });
 
-const AddProductForm: React.FC<AddProductFormProps> = ({
+const EditProductForm: React.FC<EditProductFormProps> = ({
   categories,
+  initialProduct,
   onClose,
-  onAdd,
+  onUpdate,
 }) => {
   const {
     register,
@@ -46,20 +46,22 @@ const AddProductForm: React.FC<AddProductFormProps> = ({
   } = useForm<ProductFormValues>({
     resolver: yupResolver(schema),
     defaultValues: {
-      name: "",
-      description: "",
-      price: 0,
-      stock: 0,
-      category: "",
-      featured: false,
-      isHidden: false,
+      name: initialProduct.name,
+      description: initialProduct.description,
+      price: initialProduct.price,
+      stock: initialProduct.stock,
+      category: initialProduct.category,
+      featured: initialProduct.featured,
+      isHidden: initialProduct.isHidden,
       images: [],
-      sizes: [],
-      colors: [],
+      sizes: initialProduct.sizes || [],
+      colors: initialProduct.colors || [],
     },
   });
 
-  const [imagePreviews, setImagePreviews] = useState<string[]>([]);
+  const [imagePreviews, setImagePreviews] = useState<string[]>(
+    initialProduct.images || []
+  );
   const [sizesInput, setSizesInput] = useState("");
   const [colorsInput, setColorsInput] = useState("");
 
@@ -76,11 +78,11 @@ const AddProductForm: React.FC<AddProductFormProps> = ({
   }, [errors]);
 
   const handleImagesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(e.target.files || []);
-    if (files.length) {
-      setValue("images", files);
-      setImagePreviews(files.map((file) => URL.createObjectURL(file)));
-    }
+    const files = Array.from(e.target.files || []).filter(
+      (file) => file instanceof File
+    );
+    setValue("images", files);
+    setImagePreviews(files.map((file) => URL.createObjectURL(file)));
   };
 
   const handleAddTag = (
@@ -102,39 +104,53 @@ const AddProductForm: React.FC<AddProductFormProps> = ({
 
   const onSubmit = async (data: ProductFormValues) => {
     try {
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem("token") || "";
+
       const formData = new FormData();
-      formData.append("name", data.name);
-      formData.append("description", data.description);
-      formData.append("price", String(data.price));
-      formData.append("stock", String(data.stock));
-      formData.append("category", data.category);
-      formData.append("featured", String(data.featured));
-      formData.append("isHidden", String(data.isHidden));
-      formData.append("sizes", JSON.stringify(data.sizes));
-      formData.append("colors", JSON.stringify(data.colors));
+      formData.append("name", data.name || initialProduct.name);
+      formData.append(
+        "description",
+        data.description || initialProduct.description
+      );
+      formData.append("price", String(data.price ?? initialProduct.price));
+      formData.append("stock", String(data.stock ?? initialProduct.stock));
+      formData.append("category", data.category || initialProduct.category);
+      formData.append(
+        "featured",
+        String(data.featured ?? initialProduct.featured)
+      );
+      formData.append(
+        "isHidden",
+        String(data.isHidden ?? initialProduct.isHidden)
+      );
+      formData.append(
+        "sizes",
+        JSON.stringify(data.sizes?.length ? data.sizes : initialProduct.sizes)
+      );
+      formData.append(
+        "colors",
+        JSON.stringify(
+          data.colors?.length ? data.colors : initialProduct.colors
+        )
+      );
 
-      data.images.forEach((file) => {
-        formData.append("images", file);
-      });
+      if (data.images.length > 0) {
+        data.images.forEach((file) => {
+          formData.append("images", file);
+        });
+      }
 
-      const res = await fetch("http://localhost:5000/api/products/addproduct", {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        body: formData,
-      });
+      const updatedProduct = await updateProduct(
+        initialProduct._id,
+        formData,
+        token
+      );
 
-      if (!res.ok) throw new Error("Thêm sản phẩm thất bại");
-
-      const newProduct = await res.json();
-      onAdd(newProduct.result);
-      toast.success("Thêm sản phẩm thành công!");
+      onUpdate(updatedProduct);
       onClose();
     } catch (err) {
       console.error(err);
-      toast.error("Không thể thêm sản phẩm.");
+      toast.error("Không thể cập nhật sản phẩm.");
     }
   };
 
@@ -148,9 +164,9 @@ const AddProductForm: React.FC<AddProductFormProps> = ({
           <XMarkIcon className="h-6 w-6" />
         </button>
 
-        <h2 className="text-xl font-semibold mb-4">Thêm sản phẩm mới</h2>
+        <h2 className="text-xl font-semibold mb-4">Chỉnh sửa sản phẩm</h2>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+        <div className="space-y-6">
           {/* Thông tin cơ bản */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
@@ -217,7 +233,7 @@ const AddProductForm: React.FC<AddProductFormProps> = ({
           {/* Hình ảnh */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Hình ảnh
+              Ảnh mới
             </label>
             <input
               type="file"
@@ -337,16 +353,17 @@ const AddProductForm: React.FC<AddProductFormProps> = ({
 
           {/* Nút submit */}
           <button
-            type="submit"
+            type="button"
+            onClick={handleSubmit(onSubmit)}
             disabled={isSubmitting}
             className="w-full py-2 px-4 rounded-lg text-white font-medium bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-all duration-200 text-sm disabled:bg-indigo-400 disabled:cursor-not-allowed cursor-pointer"
           >
-            {isSubmitting ? "Đang thêm..." : "Thêm sản phẩm"}
+            {isSubmitting ? "Đang cập nhật..." : "Lưu thay đổi"}
           </button>
-        </form>
+        </div>
       </div>
     </div>
   );
 };
 
-export default AddProductForm;
+export default EditProductForm;

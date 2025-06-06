@@ -14,6 +14,7 @@ import {
 } from "@/services/product.service";
 import { fetchCategories } from "@/services/category.service";
 import AddProductForm from "@/components/AddProductForm";
+import EditProductForm from "@/components/EditProductForm";
 import { toast } from "react-toastify";
 
 const ProductsPage: React.FC = () => {
@@ -22,6 +23,7 @@ const ProductsPage: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [showAddForm, setShowAddForm] = useState(false);
+  const [editingProduct, setEditingProduct] = useState<Product | null>(null);
 
   const handleAddProduct = (newProduct: Product) => {
     setProducts((prev) => [newProduct, ...prev]);
@@ -71,6 +73,24 @@ const ProductsPage: React.FC = () => {
     } catch (err) {
       toast.error("Không thể cập nhật trạng thái nổi bật.");
       console.error(err);
+    }
+  };
+
+  const loadData = async () => {
+    setLoading(true);
+    try {
+      const token = localStorage.getItem("token") || "";
+      const [productData, categoryData] = await Promise.all([
+        fetchProducts(token),
+        fetchCategories(token),
+      ]);
+      setProducts(productData);
+      setCategories(categoryData);
+    } catch (err: any) {
+      setError("Không thể tải dữ liệu.");
+      console.error(err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -125,6 +145,19 @@ const ProductsPage: React.FC = () => {
               categories={categories}
               onClose={() => setShowAddForm(false)}
               onAdd={handleAddProduct}
+            />
+          )}
+
+          {editingProduct && (
+            <EditProductForm
+              categories={categories}
+              initialProduct={editingProduct}
+              onClose={() => setEditingProduct(null)}
+              onUpdate={() => {
+                toast.success("Cập nhật sản phẩm thành công!");
+                setEditingProduct(null);
+                loadData();
+              }}
             />
           )}
 
@@ -214,7 +247,10 @@ const ProductsPage: React.FC = () => {
                         </button>
                       </td>
                       <td className="p-4">
-                        <button className="text-blue-500 hover:underline mr-4 cursor-pointer">
+                        <button
+                          onClick={() => setEditingProduct(product)}
+                          className="text-blue-500 hover:underline mr-4 cursor-pointer"
+                        >
                           Sửa
                         </button>
                         <button

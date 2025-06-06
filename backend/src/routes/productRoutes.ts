@@ -32,7 +32,7 @@ router.patch("/show/:id", showProduct);
 // thêm sản phẩm
 router.post("/addproduct", upload.array("images", 2), addProduct);
 // cập nhật sản phẩm
-router.put("/updateproduct/:id", updateProduct);
+router.put("/updateproduct/:id", upload.array("images", 2), updateProduct);
 // xóa sản phẩm
 router.delete("/deletepro/:id", deleteProduct);
 // lấy sản phẩm liên quan (có cùng danh mục với sản phẩm hiện tại nhưng không bao gồm sản phẩm hiện tại)
