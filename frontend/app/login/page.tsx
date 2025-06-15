@@ -127,12 +127,12 @@ const LoginPage = () => {
             type="password"
             register={register("password")}
           />
-          <div className="mt-5 text-left text-indigo-500 text-sm">
+          <div className="mt-5 text-left text-indigo-500 text-sm cursor-pointer">
             <a href="#">Quên mật khẩu?</a>
           </div>
           <button
             type="submit"
-            className="mt-2 w-full h-11 rounded-full text-white bg-indigo-500 hover:opacity-90 transition-opacity"
+            className="mt-2 w-full h-11 rounded-full text-white bg-indigo-500 hover:opacity-90 transition-opacity cursor-pointer"
             disabled={isSubmitting}
           >
             {isSubmitting ? "Đang đăng nhập..." : "Đăng nhập"}
