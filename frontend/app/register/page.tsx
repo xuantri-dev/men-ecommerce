@@ -99,7 +99,7 @@ const RegisterPage = () => {
           />
           <button
             type="submit"
-            className="mt-6 w-full h-11 rounded-full text-white bg-indigo-500 hover:opacity-90 transition-opacity"
+            className="mt-6 w-full h-11 rounded-full text-white bg-indigo-500 hover:opacity-90 transition-opacity cursor-pointer"
             disabled={isSubmitting}
           >
             {isSubmitting ? "Đang đăng ký..." : "Đăng ký"}
