@@ -16,6 +16,7 @@ import { fetchCategories } from "@/services/category.service";
 import AddProductForm from "@/components/AddProductForm";
 import EditProductForm from "@/components/EditProductForm";
 import { toast } from "react-toastify";
+import Image from "next/image";
 
 const ProductsPage: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
@@ -97,7 +98,7 @@ const ProductsPage: React.FC = () => {
       setProducts(productData);
       setCategories(categoryData);
       setCurrentPage(1); // reset về trang đầu
-    } catch (err: any) {
+    } catch (err: unknown) {
       setError("Không thể tải dữ liệu.");
       console.error(err);
     } finally {
@@ -187,7 +188,7 @@ const ProductsPage: React.FC = () => {
                         <td className="p-4">
                           <div className="flex gap-2">
                             {product.images.slice(0, 2).map((img, index) => (
-                              <img
+                              <Image
                                 key={index}
                                 src={getImageUrl(img)}
                                 alt={`${product.name} - ${index + 1}`}
