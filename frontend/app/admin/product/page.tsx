@@ -16,8 +16,9 @@ import { fetchCategories } from "@/services/category.service";
 import AddProductForm from "@/components/AddProductForm";
 import EditProductForm from "@/components/EditProductForm";
 import { toast } from "react-toastify";
+import Image from "next/image";
 
-const ProductsPage: React.FC = () => {
+const AdminProductPage: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -86,7 +87,7 @@ const ProductsPage: React.FC = () => {
       ]);
       setProducts(productData);
       setCategories(categoryData);
-    } catch (err: any) {
+    } catch (err: unknown) {
       setError("Không thể tải dữ liệu.");
       console.error(err);
     } finally {
@@ -105,7 +106,7 @@ const ProductsPage: React.FC = () => {
         ]);
         setProducts(productData);
         setCategories(categoryData);
-      } catch (err: any) {
+      } catch (err: unknown) {
         setError("Không thể tải dữ liệu.");
         console.error(err);
       } finally {
@@ -194,11 +195,13 @@ const ProductsPage: React.FC = () => {
                       <td className="p-4">
                         <div className="flex gap-2">
                           {product.images.slice(0, 2).map((img, index) => (
-                            <img
+                            <Image
                               key={index}
                               src={getImageUrl(img)}
                               alt={`${product.name} - ${index + 1}`}
-                              className="w-16 h-16 object-cover rounded border"
+                              width={64}
+                              height={64}
+                              className="object-cover rounded border"
                             />
                           ))}
                         </div>
@@ -272,4 +275,4 @@ const ProductsPage: React.FC = () => {
   );
 };
 
-export default ProductsPage;
+export default AdminProductPage;

@@ -6,7 +6,9 @@ import {
   deleteCategory,
   updateCategory,
 } from "../controllers/categoryController";
-import { upload } from "../controllers/categoryController";
+// import { upload } from "../controllers/categoryController";
+
+import upload from "../middlewares/upload";
 
 const router = Router();
 

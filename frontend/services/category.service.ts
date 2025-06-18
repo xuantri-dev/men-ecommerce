@@ -20,3 +20,21 @@ export const fetchCategories = async (token?: string): Promise<Category[]> => {
     throw error;
   }
 };
+
+export const deleteCategory = async (id: string, token: string) => {
+  const res = await fetch(
+    `http://localhost:5000/api/categories/deletecate/${id}`,
+    {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+
+  if (!res.ok) {
+    throw res;
+  }
+
+  return res.json();
+};

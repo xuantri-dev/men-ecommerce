@@ -1,7 +1,7 @@
 "use client";
 
 import { Category } from "@/types/category";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { Product } from "@/types/product";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { useForm } from "react-hook-form";
@@ -9,6 +9,7 @@ import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { toast } from "react-toastify";
 import { ProductFormValues } from "@/types/forms/product";
+import Image from "next/image";
 
 interface AddProductFormProps {
   categories: Category[];
@@ -63,7 +64,7 @@ const AddProductForm: React.FC<AddProductFormProps> = ({
   const [sizesInput, setSizesInput] = useState("");
   const [colorsInput, setColorsInput] = useState("");
 
-  const images = watch("images");
+  // const images = watch("images");
   const sizes = watch("sizes");
   const colors = watch("colors");
 
@@ -229,10 +230,12 @@ const AddProductForm: React.FC<AddProductFormProps> = ({
             <div className="flex flex-wrap gap-2 mt-2">
               {imagePreviews.map((url, idx) => (
                 <div key={idx} className="relative w-16 h-16">
-                  <img
+                  <Image
                     src={url}
                     alt={`preview-${idx}`}
-                    className="w-16 h-16 object-cover rounded border border-gray-200"
+                    width={64}
+                    height={64}
+                    className="object-cover rounded border border-gray-200"
                   />
                 </div>
               ))}

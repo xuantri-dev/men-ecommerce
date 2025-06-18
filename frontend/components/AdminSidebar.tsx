@@ -20,7 +20,7 @@ const AdminSidebar: React.FC = () => {
   const menuItems = [
     { name: "Trang chủ", href: "/admin", icon: HomeIcon },
     { name: "Sản phẩm", href: "/admin/product", icon: ShoppingBagIcon },
-    { name: "Danh mục", href: "/admin/categories", icon: TagIcon },
+    { name: "Danh mục", href: "/admin/category", icon: TagIcon },
     {
       name: "Đơn hàng",
       href: "/admin/orders",
