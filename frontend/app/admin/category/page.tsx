@@ -9,7 +9,7 @@ import {
   fetchCategories,
   //   deleteCategory,
 } from "@/services/category.service";
-// import AddCategoryForm from "@/components/AddCategoryForm";
+import AddCategoryForm from "@/components/AddCategoryForm";
 // import EditCategoryForm from "@/components/EditCategoryForm";
 import { toast } from "react-toastify";
 import Image from "next/image";
@@ -18,7 +18,7 @@ const AdminCategoryPage: React.FC = () => {
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  //   const [showAddForm, setShowAddForm] = useState(false);
+  const [showAddForm, setShowAddForm] = useState(false);
   //   const [editingCategory, setEditingCategory] = useState<Category | null>(null);
 
   // Pagination
@@ -30,10 +30,10 @@ const AdminCategoryPage: React.FC = () => {
     currentPage * itemsPerPage
   );
 
-  //   const handleAddCategory = (newCategory: Category) => {
-  //     setCategories((prev) => [newCategory, ...prev]);
-  //     setCurrentPage(1);
-  //   };
+  const handleAddCategory = (newCategory: Category) => {
+    setCategories((prev) => [newCategory, ...prev]);
+    setCurrentPage(1);
+  };
 
   const handleDeleteCategory = async (id: string) => {
     const confirm = window.confirm("Bạn có chắc chắn muốn xóa danh mục này?");
@@ -81,19 +81,19 @@ const AdminCategoryPage: React.FC = () => {
 
           <div className="mb-6">
             <button
-              //   onClick={() => setShowAddForm(true)}
+              onClick={() => setShowAddForm(true)}
               className="bg-blue-700 text-white px-4 py-2 rounded-md hover:bg-blue-600 cursor-pointer"
             >
               Thêm danh mục
             </button>
           </div>
 
-          {/* {showAddForm && (
+          {showAddForm && (
             <AddCategoryForm
               onClose={() => setShowAddForm(false)}
               onAdd={handleAddCategory}
             />
-          )} */}
+          )}
 
           {/* {editingCategory && (
             <EditCategoryForm
