@@ -10,6 +10,7 @@ import {
 } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 interface User {
   name: string;
@@ -114,10 +115,12 @@ const AdminHeader: React.FC = () => {
               onClick={() => setIsDropdownOpen(!isDropdownOpen)}
               className="flex items-center space-x-2"
             >
-              <img
+              <Image
                 src={user?.avatar || "/default-avatar.jpg"}
                 alt="User Avatar"
-                className="w-8 h-8 rounded-full"
+                width={32}
+                height={32}
+                className="rounded-full"
               />
               <span className="text-gray-200 hidden sm:inline">
                 {user?.name || "Admin"}

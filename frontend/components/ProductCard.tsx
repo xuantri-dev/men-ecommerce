@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Product } from "@/types/product";
 import { getImageUrl } from "@/lib/getImageUrl";
 import { ShoppingBagIcon } from "@heroicons/react/24/outline";
+import Image from "next/image";
 
 interface ProductCardProps {
   product: Product;
@@ -19,16 +20,20 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
     <div className="relative border border-[#a1a3ea] p-5 rounded-xl shadow-md w-full">
       <Link href={`/product/${product._id}`}>
         <div className="relative group h-57 overflow-hidden rounded-md my-3 mx-3">
-          <img
+          <Image
             src={img1}
             alt={product.name}
-            className="w-full h-full object-cover transition-all duration-[2000ms] ease-[cubic-bezier(0,0,0.05,1)] group-hover:opacity-0 group-hover:scale-110"
+            width={300}
+            height={300}
+            className="object-cover transition-all duration-[2000ms] ease-[cubic-bezier(0,0,0.05,1)] group-hover:opacity-0 group-hover:scale-110"
             onError={handleImageError}
           />
-          <img
+          <Image
             src={img2}
             alt={product.name}
-            className="absolute top-0 left-0 w-full h-full object-cover transition-all duration-[2000ms] ease-[cubic-bezier(0,0,0.05,1)] opacity-0 group-hover:opacity-100 group-hover:scale-110"
+            width={300}
+            height={300}
+            className="object-cover transition-all duration-[2000ms] ease-[cubic-bezier(0,0,0.05,1)] group-hover:opacity-100 group-hover:scale-110"
             onError={handleImageError}
           />
         </div>

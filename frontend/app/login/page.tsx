@@ -154,7 +154,7 @@ interface InputFieldProps {
   icon: React.ReactNode;
   placeholder: string;
   type?: string;
-  register: any;
+  register: import("react-hook-form").UseFormRegisterReturn;
 }
 
 const InputField = ({

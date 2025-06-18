@@ -6,7 +6,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { getImageUrl } from "@/lib/getImageUrl";
 import useProductDetail from "@/hooks/useProductDetail";
-import { use } from "react";
+import Image from "next/image";
 
 interface ProductDetailPageProps {
   params: Promise<{ id: string }>;
@@ -32,14 +32,13 @@ export default function ProductDetailPage({ params }: ProductDetailPageProps) {
           <div className="flex-1">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {imageUrls.map((img, index) => (
-                <img
+                <Image
                   key={index}
                   src={img}
                   alt={product.name}
-                  className="w-full h-auto rounded-xl border object-cover"
-                  onError={(e) => {
-                    (e.currentTarget as HTMLImageElement).src = "/error.png";
-                  }}
+                  width={200}
+                  height={200}
+                  className="rounded-xl border object-cover"
                 />
               ))}
             </div>
