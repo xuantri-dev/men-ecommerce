@@ -37,6 +37,8 @@ git commit -m "..."      # Commit thay đổi
 8. git checkout main && git pull         # Đồng bộ máy bạn
 9. git branch -d feature/AdminProductActive              # Xóa branch đã merge
 
+git remote -v
+
 
 
 Màu nền chính (background): #EBFCFF – Màu xanh nhạt dịu nhẹ, thoáng.
