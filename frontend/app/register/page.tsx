@@ -119,7 +119,21 @@ const RegisterPage = () => {
 
 export default RegisterPage;
 
-const InputField = ({ icon, placeholder, type = "text", register }: any) => (
+import { UseFormRegisterReturn } from "react-hook-form";
+
+interface InputFieldProps {
+  icon: React.ReactNode;
+  placeholder: string;
+  type?: string;
+  register: UseFormRegisterReturn;
+}
+
+const InputField = ({
+  icon,
+  placeholder,
+  type = "text",
+  register,
+}: InputFieldProps) => (
   <div className="flex items-center mt-4 w-full bg-white border border-gray-300/80 h-12 rounded-full overflow-hidden pl-6 gap-2">
     {icon}
     <input

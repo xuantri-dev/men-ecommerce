@@ -18,7 +18,7 @@ import EditProductForm from "@/components/EditProductForm";
 import { toast } from "react-toastify";
 import Image from "next/image";
 
-const ProductsPage: React.FC = () => {
+const AdminProductPage: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -192,7 +192,9 @@ const ProductsPage: React.FC = () => {
                                 key={index}
                                 src={getImageUrl(img)}
                                 alt={`${product.name} - ${index + 1}`}
-                                className="w-16 h-16 object-cover rounded border"
+                                width={64}
+                                height={64}
+                                className=" object-cover rounded border"
                               />
                             ))}
                           </div>
@@ -314,4 +316,4 @@ const ProductsPage: React.FC = () => {
   );
 };
 
-export default ProductsPage;
+export default AdminProductPage;
