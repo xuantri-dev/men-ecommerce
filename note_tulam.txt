@@ -30,7 +30,7 @@ git checkout -b feature/abc           # Tạo nhánh mới
 git add .  
 git commit -m "..."      # Commit thay đổi
 git push origin feature/abc           # Push lên GitHub
-Tạo Pull Request trên GitHub
+Tạo Pull Request bằng đường link trong terminal
 Review, sửa code nếu cần
 Merge vào main
 git checkout main        # Đồng bộ máy bạn
