@@ -12,6 +12,7 @@ import {
 } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import Image from "next/image";
 
 const AdminSidebar: React.FC = () => {
   const pathname = usePathname();
@@ -54,7 +55,13 @@ const AdminSidebar: React.FC = () => {
         `}
       >
         <div className="flex items-center px-4 mb-6">
-          <img src="/logo.png" alt="Logo" className="w-8 h-8 mr-2" />
+          <Image
+            src="/logo.png"
+            width={32}
+            height={32}
+            alt="Logo"
+            className="mr-2"
+          />
           <h2 className="text-xl font-bold">ASHION Admin</h2>
         </div>
 

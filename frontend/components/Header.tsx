@@ -44,11 +44,6 @@ const Header: React.FC = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const handleLogout = () => {
-    Cookies.remove("user"); // Xóa cookie 'user'
-    setUser(null);
-    window.location.href = "/login";
-  };
 
   return (
     <>

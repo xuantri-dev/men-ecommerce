@@ -10,6 +10,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { toast } from "react-toastify";
 import { ProductFormValues } from "@/types/forms/product";
 import { updateProduct } from "@/services/product.service";
+import Image from "next/image";
 
 interface EditProductFormProps {
   categories: Category[];
@@ -65,7 +66,7 @@ const EditProductForm: React.FC<EditProductFormProps> = ({
   const [sizesInput, setSizesInput] = useState("");
   const [colorsInput, setColorsInput] = useState("");
 
-  const images = watch("images");
+  // const images = watch("images");
   const sizes = watch("sizes");
   const colors = watch("colors");
 
@@ -245,10 +246,12 @@ const EditProductForm: React.FC<EditProductFormProps> = ({
             <div className="flex flex-wrap gap-2 mt-2">
               {imagePreviews.map((url, idx) => (
                 <div key={idx} className="relative w-16 h-16">
-                  <img
+                  <Image
                     src={url}
                     alt={`preview-${idx}`}
-                    className="w-16 h-16 object-cover rounded border border-gray-200"
+                    width={64}
+                    height={64}
+                    className="object-cover rounded border border-gray-200"
                   />
                 </div>
               ))}

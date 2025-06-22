@@ -9,7 +9,7 @@ const Footer: React.FC = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
         {/* Thông tin liên hệ */}
         <div>
-          <a href="/" className="inline-block mb-4">
+          <Link href="/" className="inline-block mb-4">
             <Image
               src="/logo.png"
               alt="Logo"
@@ -17,7 +17,7 @@ const Footer: React.FC = () => {
               height={40}
               className="object-contain"
             />
-          </a>
+          </Link>
           <h4 className="text-lg font-semibold mb-2">Liên Hệ</h4>
           <p className="text-sm mb-1">
             <span className="font-semibold">Địa Chỉ:</span> Tòa nhà QTSC9 (toà

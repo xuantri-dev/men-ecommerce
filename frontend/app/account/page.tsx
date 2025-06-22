@@ -109,9 +109,13 @@ const AccountPage = () => {
                 result.message || "Không thể tải thông tin người dùng"
               );
             }
-          } catch (e: any) {
+          } catch (e: unknown) {
             console.error("Lỗi khi tải thông tin người dùng:", e);
-            toast.error(e.message || "Lỗi khi tải thông tin người dùng");
+            if (e instanceof Error) {
+              toast.error(e.message || "Lỗi khi tải thông tin người dùng");
+            } else {
+              toast.error("Lỗi khi tải thông tin người dùng");
+            }
             router.push("/login");
           }
         };
@@ -159,8 +163,12 @@ const AccountPage = () => {
       toast.success("Cập nhật thành công!");
       setOpen(false);
       reset();
-    } catch (e: any) {
-      toast.error(e.message || "Cập nhật thất bại");
+    } catch (e: unknown) {
+      if (e instanceof Error) {
+        toast.error(e.message || "Cập nhật thất bại");
+      } else {
+        toast.error("Cập nhật thất bại");
+      }
     }
   };
 
@@ -178,9 +186,13 @@ const AccountPage = () => {
       Cookies.remove("user");
       toast.success(result.message || "Đăng xuất thành công!");
       router.push("/login");
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Lỗi đăng xuất:", error);
-      toast.error(error.message || "Lỗi khi đăng xuất");
+      if (error instanceof Error) {
+        toast.error(error.message || "Lỗi khi đăng xuất");
+      } else {
+        toast.error("Lỗi khi đăng xuất");
+      }
       Cookies.remove("user"); // Vẫn xóa cookie nếu có lỗi
       router.push("/login");
     }

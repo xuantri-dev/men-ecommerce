@@ -150,11 +150,13 @@ const LoginPage = () => {
   );
 };
 
+import { UseFormRegisterReturn } from "react-hook-form";
+
 interface InputFieldProps {
   icon: React.ReactNode;
   placeholder: string;
   type?: string;
-  register: any;
+  register: UseFormRegisterReturn;
 }
 
 const InputField = ({
