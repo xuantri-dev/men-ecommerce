@@ -21,7 +21,7 @@ const AdminSidebar: React.FC = () => {
   const menuItems = [
     { name: "Trang chủ", href: "/admin", icon: HomeIcon },
     { name: "Sản phẩm", href: "/admin/product", icon: ShoppingBagIcon },
-    { name: "Danh mục", href: "/admin/categories", icon: TagIcon },
+    { name: "Danh mục", href: "/admin/category", icon: TagIcon },
     {
       name: "Đơn hàng",
       href: "/admin/orders",
@@ -57,9 +57,9 @@ const AdminSidebar: React.FC = () => {
         <div className="flex items-center px-4 mb-6">
           <Image
             src="/logo.png"
+            alt="Logo"
             width={32}
             height={32}
-            alt="Logo"
             className="mr-2"
           />
           <h2 className="text-xl font-bold">ASHION Admin</h2>

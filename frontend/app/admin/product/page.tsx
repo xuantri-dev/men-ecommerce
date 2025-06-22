@@ -18,7 +18,7 @@ import EditProductForm from "@/components/EditProductForm";
 import { toast } from "react-toastify";
 import Image from "next/image";
 
-const ProductsPage: React.FC = () => {
+const AdminProductPage: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -26,8 +26,18 @@ const ProductsPage: React.FC = () => {
   const [showAddForm, setShowAddForm] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
 
+  // Pagination
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
+  const totalPages = Math.ceil(products.length / itemsPerPage);
+  const paginatedProducts = products.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
   const handleAddProduct = (newProduct: Product) => {
     setProducts((prev) => [newProduct, ...prev]);
+    setCurrentPage(1);
   };
 
   const handleDeleteProduct = async (id: string) => {
@@ -87,6 +97,7 @@ const ProductsPage: React.FC = () => {
       ]);
       setProducts(productData);
       setCategories(categoryData);
+      setCurrentPage(1); // reset về trang đầu
     } catch (err: unknown) {
       setError("Không thể tải dữ liệu.");
       console.error(err);
@@ -96,24 +107,6 @@ const ProductsPage: React.FC = () => {
   };
 
   useEffect(() => {
-    const loadData = async () => {
-      setLoading(true);
-      try {
-        const token = localStorage.getItem("token") || "";
-        const [productData, categoryData] = await Promise.all([
-          fetchProducts(token),
-          fetchCategories(token),
-        ]);
-        setProducts(productData);
-        setCategories(categoryData);
-      } catch (err: unknown) {
-        setError("Không thể tải dữ liệu.");
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     loadData();
   }, []);
 
@@ -172,101 +165,149 @@ const ProductsPage: React.FC = () => {
                 Không có sản phẩm nào.
               </div>
             ) : (
-              <table className="min-w-full">
-                <thead>
-                  <tr className="bg-gray-200 dark:bg-gray-600 text-gray-900 dark:text-white">
-                    <th className="p-4 text-left">Hình ảnh</th>
-                    <th className="p-4 text-left">Tên sản phẩm</th>
-                    <th className="p-4 text-left">Giá</th>
-                    <th className="p-4 text-left">Tồn kho</th>
-                    <th className="p-4 text-left">Danh mục</th>
-                    <th className="p-4 text-left">Trạng thái</th>
-                    <th className="p-4 text-left">Nổi bật</th>
-                    <th className="p-4 text-left">Hành động</th>
-                  </tr>
-                </thead>
-
-                <tbody>
-                  {products.map((product) => (
-                    <tr
-                      key={product._id}
-                      className="border-b dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-600"
-                    >
-                      <td className="p-4">
-                        <div className="flex gap-2">
-                          {product.images.slice(0, 2).map((img, index) => (
-                            <Image
-                              key={index}
-                              src={getImageUrl(img)}
-                              alt={`${product.name} - ${index + 1}`}
-                              width={64}
-                              height={64}
-                              className="object-cover rounded border"
-                            />
-                          ))}
-                        </div>
-                      </td>
-                      <td className="p-4 text-gray-900 dark:text-white">
-                        {product.name}
-                        <div className="text-sm text-gray-500">
-                          {product.description}
-                        </div>
-                      </td>
-                      <td className="p-4 text-gray-900 dark:text-white">
-                        {product.price.toLocaleString("vi-VN")} ₫
-                      </td>
-                      <td className="p-4 text-gray-900 dark:text-white">
-                        {product.stock}
-                      </td>
-                      <td className="p-4 text-gray-900 dark:text-white">
-                        {getCategoryNameById(product.category)}
-                      </td>
-                      <td className="p-4 text-gray-900 dark:text-white">
-                        <button
-                          onClick={() => handleToggleVisibility(product._id)}
-                          className="underline hover:text-blue-600"
-                        >
-                          {product.isHidden ? (
-                            <span className="text-red-500 font-medium">Ẩn</span>
-                          ) : (
-                            <span className="text-green-600 font-medium">
-                              Hiển thị
-                            </span>
-                          )}
-                        </button>
-                      </td>
-                      <td className="p-4 text-gray-900 dark:text-white">
-                        <button
-                          onClick={() => handleToggleFeatured(product._id)}
-                          className="underline hover:text-blue-600"
-                        >
-                          {product.featured ? (
-                            <span className="text-yellow-700 font-medium">
-                              Có
-                            </span>
-                          ) : (
-                            <span className="text-gray-500">Không</span>
-                          )}
-                        </button>
-                      </td>
-                      <td className="p-4">
-                        <button
-                          onClick={() => setEditingProduct(product)}
-                          className="text-blue-500 hover:underline mr-4 cursor-pointer"
-                        >
-                          Sửa
-                        </button>
-                        <button
-                          onClick={() => handleDeleteProduct(product._id)}
-                          className="text-red-500 hover:underline cursor-pointer"
-                        >
-                          Xóa
-                        </button>
-                      </td>
+              <>
+                <table className="min-w-full">
+                  <thead>
+                    <tr className="bg-gray-200 dark:bg-gray-600 text-gray-900 dark:text-white">
+                      <th className="p-4 text-left">Hình ảnh</th>
+                      <th className="p-4 text-left">Tên sản phẩm</th>
+                      <th className="p-4 text-left">Giá</th>
+                      <th className="p-4 text-left">Tồn kho</th>
+                      <th className="p-4 text-left">Danh mục</th>
+                      <th className="p-4 text-left">Trạng thái</th>
+                      <th className="p-4 text-left">Nổi bật</th>
+                      <th className="p-4 text-left">Hành động</th>
                     </tr>
+                  </thead>
+                  <tbody>
+                    {paginatedProducts.map((product) => (
+                      <tr
+                        key={product._id}
+                        className="border-b dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-600"
+                      >
+                        <td className="p-4">
+                          <div className="flex gap-2">
+                            {product.images.slice(0, 2).map((img, index) => (
+                              <Image
+                                key={index}
+                                src={getImageUrl(img)}
+                                alt={`${product.name} - ${index + 1}`}
+                                width={64}
+                                height={64}
+                                className="object-cover rounded border"
+                              />
+                            ))}
+                          </div>
+                        </td>
+                        <td className="p-4 text-gray-900 dark:text-white">
+                          {product.name}
+                          <div className="text-sm text-gray-500">
+                            {product.description}
+                          </div>
+                        </td>
+                        <td className="p-4 text-gray-900 dark:text-white">
+                          {product.price.toLocaleString("vi-VN")} ₫
+                        </td>
+                        <td className="p-4 text-gray-900 dark:text-white">
+                          {product.stock}
+                        </td>
+                        <td className="p-4 text-gray-900 dark:text-white">
+                          {getCategoryNameById(product.category)}
+                        </td>
+                        <td className="p-4 text-gray-900 dark:text-white">
+                          <button
+                            onClick={() => handleToggleVisibility(product._id)}
+                            className="underline hover:text-blue-600"
+                          >
+                            {product.isHidden ? (
+                              <span className="text-red-500 font-medium">
+                                Ẩn
+                              </span>
+                            ) : (
+                              <span className="text-green-600 font-medium">
+                                Hiển thị
+                              </span>
+                            )}
+                          </button>
+                        </td>
+                        <td className="p-4 text-gray-900 dark:text-white">
+                          <button
+                            onClick={() => handleToggleFeatured(product._id)}
+                            className="underline hover:text-blue-600"
+                          >
+                            {product.featured ? (
+                              <span className="text-yellow-700 font-medium">
+                                Có
+                              </span>
+                            ) : (
+                              <span className="text-gray-500">Không</span>
+                            )}
+                          </button>
+                        </td>
+                        <td className="p-4">
+                          <button
+                            onClick={() => setEditingProduct(product)}
+                            className="text-blue-500 hover:underline mr-4 cursor-pointer"
+                          >
+                            Sửa
+                          </button>
+                          <button
+                            onClick={() => handleDeleteProduct(product._id)}
+                            className="text-red-500 hover:underline cursor-pointer"
+                          >
+                            Xóa
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+
+                {/* Pagination */}
+                <div className="mt-6 flex justify-center gap-2 mb-6">
+                  <button
+                    onClick={() =>
+                      setCurrentPage((prev) => Math.max(prev - 1, 1))
+                    }
+                    disabled={currentPage === 1}
+                    className={`px-3 py-1 bg-gray-200 rounded ${
+                      currentPage === 1
+                        ? "opacity-50 cursor-not-allowed"
+                        : "hover:bg-gray-300 cursor-pointer"
+                    }`}
+                  >
+                    &larr; Trước
+                  </button>
+
+                  {Array.from({ length: totalPages }, (_, i) => (
+                    <button
+                      key={i + 1}
+                      onClick={() => setCurrentPage(i + 1)}
+                      className={`px-3 py-1 rounded ${
+                        currentPage === i + 1
+                          ? "bg-blue-600 text-white cursor-default"
+                          : "bg-gray-200 hover:bg-gray-300 cursor-pointer"
+                      }`}
+                    >
+                      {i + 1}
+                    </button>
                   ))}
-                </tbody>
-              </table>
+
+                  <button
+                    onClick={() =>
+                      setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+                    }
+                    disabled={currentPage === totalPages}
+                    className={`px-3 py-1 bg-gray-200 rounded ${
+                      currentPage === totalPages
+                        ? "opacity-50 cursor-not-allowed"
+                        : "hover:bg-gray-300 cursor-pointer"
+                    }`}
+                  >
+                    Sau &rarr;
+                  </button>
+                </div>
+              </>
             )}
           </div>
         </div>
@@ -275,4 +316,4 @@ const ProductsPage: React.FC = () => {
   );
 };
 
-export default ProductsPage;
+export default AdminProductPage;

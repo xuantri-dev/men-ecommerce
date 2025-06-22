@@ -15,9 +15,7 @@ const images = [
 
 export default function Slider() {
   const [active, setActive] = useState(0);
-
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
-
   const lengthItems = images.length;
 
   const goToSlide = useCallback((index: number) => {
@@ -51,8 +49,7 @@ export default function Slider() {
 
   return (
     <div className="slider min-h-[500px] w-full">
-      <div className="slider__container relative mx-auto h-[500px] max-w-[1300px] overflow-hidden bg-red-500">
-        {/* Slider content container */}
+      <div className="slider__container relative mx-auto h-[500px] max-w-[1300px] overflow-hidden">
         <div
           className="slider__content flex transition-transform duration-1000 h-full"
           style={{
@@ -63,7 +60,7 @@ export default function Slider() {
           {images.map((src, idx) => (
             <div
               key={idx}
-              className="slider__item w-full flex-shrink-0 h-full relative "
+              className="slider__item w-full flex-shrink-0 h-full relative"
               style={{ width: `${100 / images.length}%` }}
             >
               <Image
@@ -72,7 +69,7 @@ export default function Slider() {
                 fill
                 className="object-cover"
                 sizes="100vw"
-                priority // hoặc loading="lazy"
+                priority
               />
             </div>
           ))}
@@ -81,7 +78,6 @@ export default function Slider() {
         {/* Navigation buttons */}
         <div className="slider__btn absolute top-1/2 left-0 w-full flex justify-between px-6 -translate-y-1/2 z-10">
           <button
-            className="slider__btn-prev ml-10"
             onClick={() => {
               if (intervalRef.current) clearInterval(intervalRef.current);
               prevSlide();
@@ -90,7 +86,6 @@ export default function Slider() {
             <ArrowLeftIcon className="h-[30px] w-[30px] rounded-full bg-white p-1 border border-gray-300 text-blue-500 hover:border-blue-500 hover:bg-gray-200 transition cursor-pointer" />
           </button>
           <button
-            className="slider__btn-next mr-10"
             onClick={() => {
               if (intervalRef.current) clearInterval(intervalRef.current);
               nextSlide();
@@ -101,7 +96,7 @@ export default function Slider() {
         </div>
 
         {/* Dots */}
-        <ul className="slider__dots absolute bottom-[10px] left-0 w-full m-0 p-0 flex justify-center z-10">
+        <ul className="slider__dots absolute bottom-[10px] left-0 w-full flex justify-center z-10">
           {images.map((_, index) => (
             <li
               key={index}

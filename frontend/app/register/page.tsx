@@ -99,7 +99,7 @@ const RegisterPage = () => {
           />
           <button
             type="submit"
-            className="mt-6 w-full h-11 rounded-full text-white bg-indigo-500 hover:opacity-90 transition-opacity"
+            className="mt-6 w-full h-11 rounded-full text-white bg-indigo-500 hover:opacity-90 transition-opacity cursor-pointer"
             disabled={isSubmitting}
           >
             {isSubmitting ? "Đang đăng ký..." : "Đăng ký"}
@@ -119,16 +119,25 @@ const RegisterPage = () => {
 
 export default RegisterPage;
 
+<<<<<<< HEAD
+=======
+import { UseFormRegisterReturn } from "react-hook-form";
+
+>>>>>>> 7728b78d858a430c5bad2e674ec4d735c5cb7fd0
 interface InputFieldProps {
   icon: React.ReactNode;
   placeholder: string;
   type?: string;
+<<<<<<< HEAD
   register: ReturnType<typeof useForm>["register"] extends (
     name: any,
     options?: any
   ) => infer T
     ? T
     : never;
+=======
+  register: UseFormRegisterReturn;
+>>>>>>> 7728b78d858a430c5bad2e674ec4d735c5cb7fd0
 }
 
 const InputField = ({

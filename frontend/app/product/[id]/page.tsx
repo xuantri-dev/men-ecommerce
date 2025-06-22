@@ -36,10 +36,9 @@ export default function ProductDetailPage({ params }: ProductDetailPageProps) {
                   key={index}
                   src={img}
                   alt={product.name}
-                  className="w-full h-auto rounded-xl border object-cover"
-                  onError={(e) => {
-                    (e.currentTarget as HTMLImageElement).src = "/error.png";
-                  }}
+                  width={200}
+                  height={200}
+                  className="rounded-xl border object-cover"
                 />
               ))}
             </div>

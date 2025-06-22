@@ -25,18 +25,27 @@ git :
 tritxps28458@fpt.edu.vn
 @Xuantri1998
 https://github.com/TuiTenXT/tulam
-git pull origin main                  # Luôn cập nhật trước khi làm (có thể bỏ nếu là dự án cá nhân)
-git checkout -b feature/abc           # Tạo nhánh mới
-git add .  
-git commit -m "..."      # Commit thay đổi
-git push origin feature/abc           # Push lên GitHub
-Tạo Pull Request bằng đường link trong terminal
-Review, sửa code nếu cần
-Merge vào main
-git checkout main        # Đồng bộ máy bạn
-git pull origin main 
-git branch -d abc 
-git branch
+
+# 1. Luôn cập nhật trước
+git checkout main
+git pull origin main
+# 2. Tạo nhánh mới
+git checkout -b feature/login-form
+# 3. Làm việc, rồi commit
+git add .
+git commit -m "Thêm login form"
+# 4. Push lên GitHub
+git push origin feature/login-form
+# 5. Tạo Pull Request bằng link trong terminal → Review → Merge
+# 6. Sau merge:
+git checkout main
+git pull origin main
+git branch -d feature/login-form
+
+
+
+
+
 
 
 Màu nền chính (background): #EBFCFF – Màu xanh nhạt dịu nhẹ, thoáng.

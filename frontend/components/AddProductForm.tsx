@@ -63,7 +63,6 @@ const AddProductForm: React.FC<AddProductFormProps> = ({
   const [imagePreviews, setImagePreviews] = useState<string[]>([]);
   const [sizesInput, setSizesInput] = useState("");
   const [colorsInput, setColorsInput] = useState("");
-
   // const images = watch("images");
   const sizes = watch("sizes");
   const colors = watch("colors");
@@ -233,7 +232,9 @@ const AddProductForm: React.FC<AddProductFormProps> = ({
                   <Image
                     src={url}
                     alt={`preview-${idx}`}
-                    className="w-16 h-16 object-cover rounded border border-gray-200"
+                    width={64}
+                    height={64}
+                    className="object-cover rounded border border-gray-200"
                   />
                 </div>
               ))}

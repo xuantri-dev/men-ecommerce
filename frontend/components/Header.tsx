@@ -44,7 +44,6 @@ const Header: React.FC = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-
   return (
     <>
       {isFixed && <div className="h-[80px] lg:h-[90px]"></div>}

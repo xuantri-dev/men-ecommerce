@@ -12,6 +12,7 @@ import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import useRedirectIfAuthenticated from "@/hooks/useRedirectIfAuthenticated";
 import Cookies from "js-cookie";
+import { UseFormRegisterReturn } from "react-hook-form";
 
 interface LoginFormData {
   email: string;
@@ -39,7 +40,6 @@ const LoginPage = () => {
     formState: { errors, isSubmitting },
   } = useForm<LoginFormData>({ resolver: yupResolver(schema) });
 
-  // ✅ Hiển thị toast nếu có lỗi từ query và xóa query khỏi URL
   useEffect(() => {
     const error = searchParams.get("error");
 
@@ -51,13 +51,10 @@ const LoginPage = () => {
       }
 
       setHasShownError(true);
-
-      // ✅ Xoá query error khỏi URL bằng replace (không reload)
       router.replace("/login");
     }
   }, [searchParams, hasShownError, router]);
 
-  // ✅ Hiển thị lỗi từ react-hook-form
   useEffect(() => {
     Object.values(errors).forEach((error) => {
       if (error?.message) toast.error(error.message);
@@ -79,7 +76,6 @@ const LoginPage = () => {
         throw new Error(result.message || "Đăng nhập thất bại!");
       }
 
-      // ✅ Lưu user vào cookie (nếu cần)
       Cookies.set("user", JSON.stringify(result.user), {
         expires: 1 / 24,
         secure: false,
@@ -127,12 +123,12 @@ const LoginPage = () => {
             type="password"
             register={register("password")}
           />
-          <div className="mt-5 text-left text-indigo-500 text-sm">
+          <div className="mt-5 text-left text-indigo-500 text-sm cursor-pointer">
             <a href="#">Quên mật khẩu?</a>
           </div>
           <button
             type="submit"
-            className="mt-2 w-full h-11 rounded-full text-white bg-indigo-500 hover:opacity-90 transition-opacity"
+            className="mt-2 w-full h-11 rounded-full text-white bg-indigo-500 hover:opacity-90 transition-opacity cursor-pointer"
             disabled={isSubmitting}
           >
             {isSubmitting ? "Đang đăng nhập..." : "Đăng nhập"}
@@ -149,8 +145,6 @@ const LoginPage = () => {
     </div>
   );
 };
-
-import { UseFormRegisterReturn } from "react-hook-form";
 
 interface InputFieldProps {
   icon: React.ReactNode;
