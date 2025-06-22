@@ -23,17 +23,15 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
           <Image
             src={img1}
             alt={product.name}
-            width={300}
-            height={300}
+            fill
             className="object-cover transition-all duration-[2000ms] ease-[cubic-bezier(0,0,0.05,1)] group-hover:opacity-0 group-hover:scale-110"
             onError={handleImageError}
           />
           <Image
             src={img2}
             alt={product.name}
-            width={300}
-            height={300}
-            className="object-cover transition-all duration-[2000ms] ease-[cubic-bezier(0,0,0.05,1)] group-hover:opacity-100 group-hover:scale-110"
+            fill
+            className="absolute top-0 left-0 object-cover transition-all duration-[2000ms] ease-[cubic-bezier(0,0,0.05,1)] opacity-0 group-hover:opacity-100 group-hover:scale-110"
             onError={handleImageError}
           />
         </div>

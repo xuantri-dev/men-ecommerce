@@ -194,7 +194,7 @@ const AdminProductPage: React.FC = () => {
                                 alt={`${product.name} - ${index + 1}`}
                                 width={64}
                                 height={64}
-                                className=" object-cover rounded border"
+                                className="object-cover rounded border"
                               />
                             ))}
                           </div>

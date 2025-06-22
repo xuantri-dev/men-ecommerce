@@ -25,18 +25,26 @@ git :
 tritxps28458@fpt.edu.vn
 @Xuantri1998
 https://github.com/TuiTenXT/tulam
-1. git pull origin main                  # Luôn cập nhật trước khi làm (có thể bỏ nếu là dự án cá nhân)
-2. git checkout -b feature/AdminProductActive           # Tạo nhánh mới
-3. 
-git add .  
-git commit -m "..."      # Commit thay đổi
-4. git push origin feature/AdminProductActive           # Push lên GitHub
-5. Lấy link pull request trong teminal
-6. Review, sửa code nếu cần
-7. Merge vào main
-8. git checkout main            # Chuyểnn về lại nhánh main (lúc này trên vscode sẽ hiện lại code cũ)
-9. git pull origin main         # Lấy code từ nhánh main về lại máy
-9. git branch -d feature/AdminProductActive              # Xóa branch đã merge
+
+# 1. Luôn cập nhật trước
+git checkout main
+git pull origin main
+# 2. Tạo nhánh mới
+git checkout -b feature/login-form
+# 3. Làm việc, rồi commit
+git add .
+git commit -m "Thêm login form"
+# 4. Push lên GitHub
+git push origin feature/login-form
+# 5. Tạo Pull Request bằng link trong terminal → Review → Merge
+# 6. Sau merge:
+git checkout main
+git pull origin main
+git branch -d feature/login-form
+
+
+
+
 
 
 

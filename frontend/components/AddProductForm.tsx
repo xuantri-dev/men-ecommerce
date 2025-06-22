@@ -63,7 +63,7 @@ const AddProductForm: React.FC<AddProductFormProps> = ({
   const [imagePreviews, setImagePreviews] = useState<string[]>([]);
   const [sizesInput, setSizesInput] = useState("");
   const [colorsInput, setColorsInput] = useState("");
-
+  // const images = watch("images");
   const sizes = watch("sizes");
   const colors = watch("colors");
 

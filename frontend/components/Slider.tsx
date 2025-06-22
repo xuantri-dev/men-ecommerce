@@ -18,19 +18,19 @@ export default function Slider() {
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const lengthItems = images.length;
 
-  const goToSlide = (index: number) => {
+  const goToSlide = useCallback((index: number) => {
     setActive(index);
-  };
+  }, []);
 
   const nextSlide = useCallback(() => {
     const nextIndex = active + 1 >= lengthItems ? 0 : active + 1;
     goToSlide(nextIndex);
-  }, [active, lengthItems]);
+  }, [active, goToSlide, lengthItems]);
 
-  const prevSlide = () => {
+  const prevSlide = useCallback(() => {
     const prevIndex = active - 1 < 0 ? lengthItems - 1 : active - 1;
     goToSlide(prevIndex);
-  };
+  }, [active, goToSlide, lengthItems]);
 
   useEffect(() => {
     intervalRef.current = setInterval(() => {
@@ -48,8 +48,8 @@ export default function Slider() {
   };
 
   return (
-    <div className="slider bg-blue-500">
-      <div className="slider__container relative mx-auto h-[500px] max-w-[1300px] overflow-hidden bg-red-500">
+    <div className="slider min-h-[500px] w-full">
+      <div className="slider__container relative mx-auto h-[500px] max-w-[1300px] overflow-hidden">
         <div
           className="slider__content flex transition-transform duration-1000 h-full"
           style={{
@@ -60,15 +60,16 @@ export default function Slider() {
           {images.map((src, idx) => (
             <div
               key={idx}
-              className="slider__item w-full flex-shrink-0 h-full"
+              className="slider__item w-full flex-shrink-0 h-full relative"
               style={{ width: `${100 / images.length}%` }}
             >
               <Image
                 src={src}
                 alt={`slider-${idx}`}
-                width={1300}
-                height={500}
-                className="w-full h-full object-cover"
+                fill
+                className="object-cover"
+                sizes="100vw"
+                priority
               />
             </div>
           ))}

@@ -1,5 +1,16 @@
 "use client";
 
+<<<<<<< HEAD
+import { useState, useEffect } from "react";
+import { useForm, SubmitHandler } from "react-hook-form";
+import * as Yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { toast } from "react-toastify";
+import { XMarkIcon } from "@heroicons/react/24/outline";
+import { CategoryFormValues } from "@/types/forms/category";
+import Image from "next/image";
+import { Category } from "@/types/category";
+=======
 import { useForm } from "react-hook-form";
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -8,12 +19,27 @@ import { XMarkIcon } from "@heroicons/react/24/outline";
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { toast } from "react-toastify";
+>>>>>>> 7728b78d858a430c5bad2e674ec4d735c5cb7fd0
 
 interface AddCategoryFormProps {
   onClose: () => void;
   onAdd: (category: Category) => void;
 }
 
+<<<<<<< HEAD
+const schema: Yup.ObjectSchema<CategoryFormValues> = Yup.object({
+  name: Yup.string().required("Vui lòng nhập tên danh mục"),
+  image: Yup.mixed<File>()
+    .required("Vui lòng chọn hình ảnh")
+    .test("fileType", "Chỉ chấp nhận file ảnh", (file) => {
+      return (
+        file instanceof File &&
+        ["image/jpeg", "image/png", "image/gif", "image/webp"].includes(
+          file.type
+        )
+      );
+    }),
+=======
 interface CategoryFormValues {
   name: string;
   image: File;
@@ -28,6 +54,7 @@ const schema = Yup.object({
       "Ảnh không hợp lệ",
       (value) => value instanceof File && value.type.startsWith("image/")
     ),
+>>>>>>> 7728b78d858a430c5bad2e674ec4d735c5cb7fd0
 });
 
 const AddCategoryForm: React.FC<AddCategoryFormProps> = ({
@@ -46,8 +73,18 @@ const AddCategoryForm: React.FC<AddCategoryFormProps> = ({
       image: undefined,
     },
   });
+<<<<<<< HEAD
+  const [imagePreviews, setImagePreviews] = useState<string[]>([]);
+
+  useEffect(() => {
+    return () => {
+      imagePreviews.forEach((url) => URL.revokeObjectURL(url));
+    };
+  }, [imagePreviews]);
+=======
 
   const [imagePreview, setImagePreview] = useState<string | null>(null);
+>>>>>>> 7728b78d858a430c5bad2e674ec4d735c5cb7fd0
 
   useEffect(() => {
     if (errors) {
@@ -57,6 +94,28 @@ const AddCategoryForm: React.FC<AddCategoryFormProps> = ({
     }
   }, [errors]);
 
+<<<<<<< HEAD
+  const handleImagesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setValue("image", file);
+      setImagePreviews([URL.createObjectURL(file)]);
+    }
+  };
+
+  const onSubmit: SubmitHandler<CategoryFormValues> = async (
+    data: CategoryFormValues
+  ) => {
+    try {
+      const token = localStorage.getItem("token");
+      const formData = new FormData();
+      formData.append("name", data.name);
+      if (data.image instanceof File) {
+        formData.append("image", data.image);
+      } else {
+        throw new Error("Hình ảnh không hợp lệ");
+      }
+=======
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] || null;
     if (file) {
@@ -76,6 +135,7 @@ const AddCategoryForm: React.FC<AddCategoryFormProps> = ({
       const formData = new FormData();
       formData.append("name", data.name);
       if (data.image) formData.append("image", data.image);
+>>>>>>> 7728b78d858a430c5bad2e674ec4d735c5cb7fd0
 
       const res = await fetch("http://localhost:5000/api/categories/addcate", {
         method: "POST",
@@ -87,8 +147,13 @@ const AddCategoryForm: React.FC<AddCategoryFormProps> = ({
 
       if (!res.ok) throw new Error("Thêm danh mục thất bại");
 
+<<<<<<< HEAD
+      const newCategory = await res.json();
+      onAdd(newCategory.result);
+=======
       const result = await res.json();
       onAdd(result.result);
+>>>>>>> 7728b78d858a430c5bad2e674ec4d735c5cb7fd0
       toast.success("Thêm danh mục thành công!");
       onClose();
     } catch (err) {
@@ -99,7 +164,11 @@ const AddCategoryForm: React.FC<AddCategoryFormProps> = ({
 
   return (
     <div className="fixed inset-0 bg-gray-900 bg-opacity-60 z-50 flex items-center justify-center">
+<<<<<<< HEAD
+      <div className="bg-white p-6 rounded-xl shadow-xl w-full max-w-md max-h-[90vh] overflow-y-auto relative">
+=======
       <div className="bg-white p-6 rounded-xl shadow-xl w-full max-w-lg max-h-[90vh] overflow-y-auto relative">
+>>>>>>> 7728b78d858a430c5bad2e674ec4d735c5cb7fd0
         <button
           onClick={onClose}
           className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 cursor-pointer"
@@ -116,7 +185,11 @@ const AddCategoryForm: React.FC<AddCategoryFormProps> = ({
             </label>
             <input
               {...register("name")}
+<<<<<<< HEAD
+              placeholder="Tên danh mục"
+=======
               placeholder="Nhập tên danh mục"
+>>>>>>> 7728b78d858a430c5bad2e674ec4d735c5cb7fd0
               className="w-full px-3 py-2 border border-gray-200 rounded-lg bg-gray-50 text-gray-900 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200"
             />
           </div>
@@ -128,6 +201,24 @@ const AddCategoryForm: React.FC<AddCategoryFormProps> = ({
             <input
               type="file"
               accept="image/*"
+<<<<<<< HEAD
+              onChange={handleImagesChange}
+              className="w-full px-3 py-2 border border-gray-200 rounded-lg bg-gray-50 text-gray-900 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200 cursor-pointer"
+            />
+            <div className="flex flex-wrap gap-2 mt-2">
+              {imagePreviews.map((url, idx) => (
+                <div key={idx} className="relative w-16 h-16">
+                  <Image
+                    src={url}
+                    alt={`preview-${idx}`}
+                    width={64}
+                    height={64}
+                    className="object-cover rounded border border-gray-200"
+                  />
+                </div>
+              ))}
+            </div>
+=======
               onChange={handleImageChange}
               className="w-full px-3 py-2 border border-gray-200 rounded-lg bg-gray-50 text-gray-900 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200 cursor-pointer"
             />
@@ -142,12 +233,17 @@ const AddCategoryForm: React.FC<AddCategoryFormProps> = ({
                 />
               </div>
             )}
+>>>>>>> 7728b78d858a430c5bad2e674ec4d735c5cb7fd0
           </div>
 
           <button
             type="submit"
             disabled={isSubmitting}
+<<<<<<< HEAD
+            className="w-full py-2 px-4 rounded-lg text-white font-medium bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-all duration-200 text-sm disabled:bg-indigo-400 disabled:cursor-not-allowed cursor-pointer"
+=======
             className="w-full py-2 px-4 rounded-lg text-white font-medium bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-all duration-200 text-sm disabled:bg-indigo-400 disabled:cursor-not-allowed"
+>>>>>>> 7728b78d858a430c5bad2e674ec4d735c5cb7fd0
           >
             {isSubmitting ? "Đang thêm..." : "Thêm danh mục"}
           </button>

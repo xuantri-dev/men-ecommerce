@@ -12,6 +12,7 @@ import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import useRedirectIfAuthenticated from "@/hooks/useRedirectIfAuthenticated";
 import Cookies from "js-cookie";
+import { UseFormRegisterReturn } from "react-hook-form";
 
 interface LoginFormData {
   email: string;
@@ -39,7 +40,6 @@ const LoginPage = () => {
     formState: { errors, isSubmitting },
   } = useForm<LoginFormData>({ resolver: yupResolver(schema) });
 
-  // ✅ Hiển thị toast nếu có lỗi từ query và xóa query khỏi URL
   useEffect(() => {
     const error = searchParams.get("error");
 
@@ -51,13 +51,10 @@ const LoginPage = () => {
       }
 
       setHasShownError(true);
-
-      // ✅ Xoá query error khỏi URL bằng replace (không reload)
       router.replace("/login");
     }
   }, [searchParams, hasShownError, router]);
 
-  // ✅ Hiển thị lỗi từ react-hook-form
   useEffect(() => {
     Object.values(errors).forEach((error) => {
       if (error?.message) toast.error(error.message);
@@ -79,7 +76,6 @@ const LoginPage = () => {
         throw new Error(result.message || "Đăng nhập thất bại!");
       }
 
-      // ✅ Lưu user vào cookie (nếu cần)
       Cookies.set("user", JSON.stringify(result.user), {
         expires: 1 / 24,
         secure: false,
@@ -154,7 +150,7 @@ interface InputFieldProps {
   icon: React.ReactNode;
   placeholder: string;
   type?: string;
-  register: import("react-hook-form").UseFormRegisterReturn;
+  register: UseFormRegisterReturn;
 }
 
 const InputField = ({

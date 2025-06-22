@@ -119,13 +119,25 @@ const RegisterPage = () => {
 
 export default RegisterPage;
 
+<<<<<<< HEAD
+=======
 import { UseFormRegisterReturn } from "react-hook-form";
 
+>>>>>>> 7728b78d858a430c5bad2e674ec4d735c5cb7fd0
 interface InputFieldProps {
   icon: React.ReactNode;
   placeholder: string;
   type?: string;
+<<<<<<< HEAD
+  register: ReturnType<typeof useForm>["register"] extends (
+    name: any,
+    options?: any
+  ) => infer T
+    ? T
+    : never;
+=======
   register: UseFormRegisterReturn;
+>>>>>>> 7728b78d858a430c5bad2e674ec4d735c5cb7fd0
 }
 
 const InputField = ({
